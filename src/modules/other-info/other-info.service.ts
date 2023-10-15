@@ -72,7 +72,11 @@ export class OtherInfoService {
   async handleGetAllOtherInfoName(param: any): Promise<HttpResponse> {
     try {
       const result = await this.otherInfoRepository.find({
-        where: { type: param?.type ? param.type : null },
+        where: [
+          { type: param?.type ? param.type : null },
+          { type: 'none' },
+          { type: 'unknown' },
+        ],
         order: { id: 'ASC' },
         select: {
           id: true,

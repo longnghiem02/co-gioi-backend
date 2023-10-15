@@ -90,7 +90,9 @@ export class PathService {
         .where('paths.name ILIKE :name', {
           name: param.name ? `%${param.name}%` : '',
         })
+        .andWhere('paths.id > :id', { id: 0 })
         .limit(param.take)
+        .offset((param.page - 1) * param.take)
         .orderBy('paths.name', 'ASC')
         .getManyAndCount();
 
