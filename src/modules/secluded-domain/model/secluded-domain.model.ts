@@ -8,6 +8,7 @@ export class SecludedDomain extends AbstractEntity {
   @Column({
     name: 'name',
     nullable: false,
+    unique: true,
   })
   name: string;
 
@@ -35,7 +36,9 @@ export class SecludedDomain extends AbstractEntity {
     nullable: false,
   })
   pathId: number;
-  @ManyToOne(() => Path, (path) => path.secludedDomains)
+  @ManyToOne(() => Path, (path) => path.secludedDomains, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'path_id',
   })
@@ -46,7 +49,9 @@ export class SecludedDomain extends AbstractEntity {
     nullable: false,
   })
   typeId: number;
-  @ManyToOne(() => OtherInfo, (type) => type.secluded_domains)
+  @ManyToOne(() => OtherInfo, (type) => type.secludedDomains, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'type_id',
   })

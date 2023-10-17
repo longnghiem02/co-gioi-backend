@@ -7,6 +7,8 @@ import { AccountModule } from './modules/account/account.module';
 import { PathModule } from './modules/path/path.module';
 import { OtherInfoModule } from './modules/other-info/other-info.module';
 import { GuModule } from './modules/gu/gu.module';
+import { GuFormationModule } from './modules/gu-formation/gu-formation.module';
+import { GuHouseModule } from './modules/gu-house/gu-house.module';
 import { BlandGheavenModule } from './modules/bland-gheaven/bland-gheaven.module';
 import { SecludedDomainModule } from './modules/secluded-domain/secluded-domain.module';
 
@@ -20,6 +22,8 @@ import { SecludedDomainModule } from './modules/secluded-domain/secluded-domain.
     PathModule,
     OtherInfoModule,
     GuModule,
+    GuFormationModule,
+    GuHouseModule,
     BlandGheavenModule,
     SecludedDomainModule,
   ],

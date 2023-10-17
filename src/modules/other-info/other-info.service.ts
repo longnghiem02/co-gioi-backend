@@ -42,7 +42,7 @@ export class OtherInfoService {
 
   async handleGetAllOtherInfo(param: any): Promise<HttpResponse> {
     try {
-      const data = await this.otherInfoRepository.findAndCount({
+      const [data, count] = await this.otherInfoRepository.findAndCount({
         where: { id: Not(LessThan(0)), type: param.type ? param.type : null },
         order: { name: 'ASC' },
         take: param.take,
@@ -53,8 +53,10 @@ export class OtherInfoService {
         },
       });
 
-      const meta = new MetaDTO(data[1], param.take, param.page);
-      const result = new PageDTO(data[0], meta);
+      const result = new PageDTO(
+        data,
+        new MetaDTO(count, param.take, param.page),
+      );
 
       if (result) {
         return HttpResponse(HttpStatus.OK, '', result);
@@ -110,7 +112,7 @@ export class OtherInfoService {
         await this.otherInfoRepository.save(data);
         return HttpResponse(
           HttpStatus.CREATED,
-          CommonMessage.ADD_OTHER_INFO_SUCCCEED,
+          CommonMessage.ADD_OTHER_INFO_SUCCEED,
         );
       }
     } catch (error) {
@@ -142,7 +144,7 @@ export class OtherInfoService {
           });
           return HttpResponse(
             HttpStatus.CREATED,
-            CommonMessage.UPDATE_OTHER_INFO_SUCCCEED,
+            CommonMessage.UPDATE_OTHER_INFO_SUCCEED,
           );
         }
       }
@@ -160,7 +162,7 @@ export class OtherInfoService {
         await this.otherInfoRepository.delete(param.id);
         return HttpResponse(
           HttpStatus.ACCEPTED,
-          CommonMessage.DELETE_OTHER_INFO_SUCCCEED,
+          CommonMessage.DELETE_OTHER_INFO_SUCCEED,
         );
       } else {
         return HttpResponse(

@@ -1,8 +1,8 @@
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Not, Repository } from 'typeorm';
-import { Gu } from './model/gu.model';
 import { HttpResponse } from 'src/configs/HttpResponse.config';
+import { GuFormation } from './model/gu-formation.model';
 import { MetaDTO } from 'src/common/dto/meta.dto';
 import { PageDTO } from 'src/common/dto/page.dto';
 import {
@@ -11,15 +11,15 @@ import {
 } from 'src/common/constants/message.constants';
 
 @Injectable()
-export class GuService {
+export class GuFormationService {
   constructor(
-    @InjectRepository(Gu)
-    private guRepository: Repository<Gu>,
+    @InjectRepository(GuFormation)
+    private guFormationRepository: Repository<GuFormation>,
   ) {}
 
-  async handleGetGu(param: any): Promise<HttpResponse> {
+  async handleGetGuFormation(param: any): Promise<HttpResponse> {
     try {
-      const result = await this.guRepository.findOne({
+      const result = await this.guFormationRepository.findOne({
         where: { id: param.id },
         relations: { path: true, type: true, rank: true },
         select: {
@@ -51,9 +51,9 @@ export class GuService {
     }
   }
 
-  async handleGetAllGu(param: any): Promise<HttpResponse> {
+  async handleGetAllGuFormation(param: any): Promise<HttpResponse> {
     try {
-      const [data, count] = await this.guRepository.findAndCount({
+      const [data, count] = await this.guFormationRepository.findAndCount({
         where: {
           pathId: param.path ? param.path : null,
           typeId: param.type ? param.type : null,
@@ -83,9 +83,9 @@ export class GuService {
     }
   }
 
-  async handleSearchGu(param: any): Promise<HttpResponse> {
+  async handleSearchGuFormation(param: any): Promise<HttpResponse> {
     try {
-      const result = await this.guRepository
+      const result = await this.guFormationRepository
         .createQueryBuilder('gus')
         .select(['gus.id', 'gus.name'])
         .where('gus.name ILIKE :name', { name: `%${param.name}%` })
@@ -102,13 +102,15 @@ export class GuService {
     }
   }
 
-  async handleAddGu(data: any): Promise<HttpResponse> {
+  async handleAddGuFormation(data: any): Promise<HttpResponse> {
     try {
-      const check = await this.guRepository.findOneBy({ name: data.name });
+      const check = await this.guFormationRepository.findOneBy({
+        name: data.name,
+      });
       if (check) {
         return HttpResponse(HttpStatus.BAD_REQUEST, ErrorMessage.GU_EXISTS);
       } else {
-        await this.guRepository.save(data);
+        await this.guFormationRepository.save(data);
         return HttpResponse(HttpStatus.CREATED, CommonMessage.ADD_GU_SUCCEED);
       }
     } catch (error) {
@@ -116,19 +118,21 @@ export class GuService {
     }
   }
 
-  async handleUpdateGu(param: any, data: any): Promise<HttpResponse> {
+  async handleUpdateGuFormation(param: any, data: any): Promise<HttpResponse> {
     try {
-      const result = await this.guRepository.findOneBy({ id: param.id });
+      const result = await this.guFormationRepository.findOneBy({
+        id: param.id,
+      });
       if (!result) {
         return HttpResponse(HttpStatus.BAD_REQUEST, ErrorMessage.GU_NOT_FOUND);
       } else {
-        const check = await this.guRepository.findOne({
+        const check = await this.guFormationRepository.findOne({
           where: { id: Not(param.id), name: data.name },
         });
         if (check) {
           return HttpResponse(HttpStatus.BAD_REQUEST, ErrorMessage.GU_EXISTS);
         } else {
-          await this.guRepository.update(param.id, {
+          await this.guFormationRepository.update(param.id, {
             ...data,
             updatedAt: new Date(),
           });
@@ -143,13 +147,13 @@ export class GuService {
     }
   }
 
-  async handleDeleteGu(param: any): Promise<HttpResponse> {
+  async handleDeleteGuFormation(param: any): Promise<HttpResponse> {
     try {
-      const result = await this.guRepository.findOne({
+      const result = await this.guFormationRepository.findOne({
         where: { id: param.id },
       });
       if (result) {
-        await this.guRepository.delete(param.id);
+        await this.guFormationRepository.delete(param.id);
         return HttpResponse(
           HttpStatus.ACCEPTED,
           CommonMessage.DELETE_GU_SUCCEED,

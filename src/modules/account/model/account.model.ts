@@ -13,6 +13,7 @@ export class Account extends AbstractEntity {
   @Column({
     name: 'email',
     nullable: false,
+    unique: true,
   })
   email: string;
 

@@ -14,6 +14,7 @@ export class Path extends AbstractEntity {
   @Column({
     name: 'name',
     nullable: false,
+    unique: true,
   })
   name: string;
 
@@ -46,8 +47,8 @@ export class Path extends AbstractEntity {
   )
   characters: Character[];
 
-  @OneToMany(() => BlandGheaven, (bland_gheaven) => bland_gheaven.path)
-  blands_gheavens: BlandGheaven[];
+  @OneToMany(() => BlandGheaven, (blandGheaven) => blandGheaven.path)
+  blandsGheavens: BlandGheaven[];
 
   @OneToMany(() => SecludedDomain, (secludedDomain) => secludedDomain.path)
   secludedDomains: SecludedDomain[];

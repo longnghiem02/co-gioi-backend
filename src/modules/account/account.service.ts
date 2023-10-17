@@ -23,7 +23,7 @@ export class AccountService {
 
   async handleGetAllAccount(param: any): Promise<HttpResponse> {
     try {
-      const data = await this.accountRepository.findAndCount({
+      const [data, count] = await this.accountRepository.findAndCount({
         order: { username: 'ASC' },
         take: param.take,
         skip: (param.page - 1) * param.take,
@@ -34,8 +34,10 @@ export class AccountService {
         },
       });
 
-      const meta = new MetaDTO(data[1], param.take, param.page);
-      const result = new PageDTO(data[0], meta);
+      const result = new PageDTO(
+        data,
+        new MetaDTO(count, param.take, param.page),
+      );
 
       if (result) {
         return HttpResponse(HttpStatus.OK, '', result);
@@ -115,7 +117,7 @@ export class AccountService {
         });
         return HttpResponse(
           HttpStatus.CREATED,
-          CommonMessage.CREATE_ACCOUNT_SUCCCEED,
+          CommonMessage.CREATE_ACCOUNT_SUCCEED,
         );
       }
     } catch (error) {
@@ -189,7 +191,7 @@ export class AccountService {
           });
           return HttpResponse(
             HttpStatus.CREATED,
-            CommonMessage.UPDATE_ACCOUNT_SUCCCEED,
+            CommonMessage.UPDATE_ACCOUNT_SUCCEED,
           );
         }
       } else {
@@ -223,7 +225,7 @@ export class AccountService {
           });
           return HttpResponse(
             HttpStatus.CREATED,
-            CommonMessage.UPDATE_ACCOUNT_SUCCCEED,
+            CommonMessage.UPDATE_ACCOUNT_SUCCEED,
           );
         } else {
           return HttpResponse(
@@ -251,7 +253,7 @@ export class AccountService {
         await this.accountRepository.delete(param.id);
         return HttpResponse(
           HttpStatus.OK,
-          CommonMessage.DELETE_ACCOUNT_SUCCCEED,
+          CommonMessage.DELETE_ACCOUNT_SUCCEED,
         );
       } else {
         return HttpResponse(

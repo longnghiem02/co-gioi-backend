@@ -8,6 +8,7 @@ export class GuFormation extends AbstractEntity {
   @Column({
     name: 'name',
     nullable: false,
+    unique: true,
   })
   name: string;
 
@@ -35,7 +36,9 @@ export class GuFormation extends AbstractEntity {
     nullable: false,
   })
   pathId: number;
-  @ManyToOne(() => Path, (path) => path.guFormations)
+  @ManyToOne(() => Path, (path) => path.guFormations, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'path_id',
   })
@@ -46,7 +49,9 @@ export class GuFormation extends AbstractEntity {
     nullable: false,
   })
   typeId: number;
-  @ManyToOne(() => OtherInfo, (type) => type.guFormations)
+  @ManyToOne(() => OtherInfo, (type) => type.guFormations, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'type_id',
   })
@@ -57,7 +62,9 @@ export class GuFormation extends AbstractEntity {
     nullable: false,
   })
   rankId: number;
-  @ManyToOne(() => OtherInfo, (rank) => rank.guFormations)
+  @ManyToOne(() => OtherInfo, (rank) => rank.guFormations, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'rank_id',
   })

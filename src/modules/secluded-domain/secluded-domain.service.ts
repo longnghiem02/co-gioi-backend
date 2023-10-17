@@ -48,7 +48,7 @@ export class SecludedDomainService {
 
   async handleGetAllSecludedDomain(param: any): Promise<HttpResponse> {
     try {
-      const data = await this.secludedDomainRepository.findAndCount({
+      const [data, count] = await this.secludedDomainRepository.findAndCount({
         where: { pathId: param.path ? param.path : null },
         order: { name: 'ASC' },
         take: param.take,
@@ -59,8 +59,10 @@ export class SecludedDomainService {
         },
       });
 
-      const meta = new MetaDTO(data[1], param.take, param.page);
-      const result = new PageDTO(data[0], meta);
+      const result = new PageDTO(
+        data,
+        new MetaDTO(count, param.take, param.page),
+      );
 
       if (result) {
         return HttpResponse(HttpStatus.OK, '', result);
@@ -89,7 +91,7 @@ export class SecludedDomainService {
         await this.secludedDomainRepository.save(data);
         return HttpResponse(
           HttpStatus.CREATED,
-          CommonMessage.ADD_SECLUDED_DOMAIN_SUCCCEED,
+          CommonMessage.ADD_SECLUDED_DOMAIN_SUCCEED,
         );
       }
     } catch (error) {
@@ -126,7 +128,7 @@ export class SecludedDomainService {
           });
           return HttpResponse(
             HttpStatus.CREATED,
-            CommonMessage.UPDATE_SECLUDED_DOMAIN_SUCCCEED,
+            CommonMessage.UPDATE_SECLUDED_DOMAIN_SUCCEED,
           );
         }
       }
@@ -144,7 +146,7 @@ export class SecludedDomainService {
         await this.secludedDomainRepository.delete(param.id);
         return HttpResponse(
           HttpStatus.ACCEPTED,
-          CommonMessage.DELETE_SECLUDED_DOMAIN_SUCCCEED,
+          CommonMessage.DELETE_SECLUDED_DOMAIN_SUCCEED,
         );
       } else {
         return HttpResponse(

@@ -14,6 +14,7 @@ export class OtherInfo extends AbstractEntity {
   @Column({
     name: 'name',
     nullable: false,
+    unique: true,
   })
   name: string;
 
@@ -79,17 +80,17 @@ export class OtherInfo extends AbstractEntity {
 
   @OneToMany(
     () => BlandGheaven,
-    (bland_gheaven) => {
-      bland_gheaven.type;
+    (blandGheaven) => {
+      blandGheaven.type;
     },
   )
-  blands_gheavens: BlandGheaven[];
+  blandsGheavens: BlandGheaven[];
 
   @OneToMany(
     () => SecludedDomain,
-    (secluded_domain) => {
-      secluded_domain.type;
+    (secludedDomain) => {
+      secludedDomain.type;
     },
   )
-  secluded_domains: SecludedDomain[];
+  secludedDomains: SecludedDomain[];
 }

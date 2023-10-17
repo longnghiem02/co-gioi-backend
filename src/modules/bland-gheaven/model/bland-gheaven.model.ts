@@ -8,6 +8,7 @@ export class BlandGheaven extends AbstractEntity {
   @Column({
     name: 'name',
     nullable: false,
+    unique: true,
   })
   name: string;
 
@@ -35,7 +36,9 @@ export class BlandGheaven extends AbstractEntity {
     nullable: false,
   })
   pathId: number;
-  @ManyToOne(() => Path, (path) => path.blands_gheavens)
+  @ManyToOne(() => Path, (path) => path.blandsGheavens, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'path_id',
   })
@@ -46,7 +49,9 @@ export class BlandGheaven extends AbstractEntity {
     nullable: false,
   })
   typeId: number;
-  @ManyToOne(() => OtherInfo, (type) => type.blands_gheavens)
+  @ManyToOne(() => OtherInfo, (type) => type.blandsGheavens, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'type_id',
   })

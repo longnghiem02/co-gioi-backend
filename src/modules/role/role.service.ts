@@ -80,10 +80,7 @@ export class RoleService {
         return HttpResponse(HttpStatus.BAD_REQUEST, ErrorMessage.ROLE_EXISTS);
       } else {
         await this.roleRepository.save(data);
-        return HttpResponse(
-          HttpStatus.CREATED,
-          CommonMessage.ADD_ROLE_SUCCCEED,
-        );
+        return HttpResponse(HttpStatus.CREATED, CommonMessage.ADD_ROLE_SUCCEED);
       }
     } catch (error) {
       return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
@@ -111,7 +108,7 @@ export class RoleService {
           });
           return HttpResponse(
             HttpStatus.CREATED,
-            CommonMessage.UPDATE_ROLE_SUCCCEED,
+            CommonMessage.UPDATE_ROLE_SUCCEED,
           );
         }
       }
@@ -129,7 +126,7 @@ export class RoleService {
         await this.roleRepository.delete(param.id);
         return HttpResponse(
           HttpStatus.ACCEPTED,
-          CommonMessage.DELETE_ROLE_SUCCCEED,
+          CommonMessage.DELETE_ROLE_SUCCEED,
         );
       } else {
         return HttpResponse(HttpStatus.NOT_FOUND, ErrorMessage.ROLE_NOT_FOUND);

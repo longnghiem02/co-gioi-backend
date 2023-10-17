@@ -8,6 +8,7 @@ export class GuHouse extends AbstractEntity {
   @Column({
     name: 'name',
     nullable: false,
+    unique: true,
   })
   name: string;
 
@@ -35,7 +36,9 @@ export class GuHouse extends AbstractEntity {
     nullable: false,
   })
   pathId: number;
-  @ManyToOne(() => Path, (path) => path.guHouses)
+  @ManyToOne(() => Path, (path) => path.guHouses, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'path_id',
   })
@@ -46,7 +49,9 @@ export class GuHouse extends AbstractEntity {
     nullable: false,
   })
   typeId: number;
-  @ManyToOne(() => OtherInfo, (type) => type.guHouses)
+  @ManyToOne(() => OtherInfo, (type) => type.guHouses, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'type_id',
   })
@@ -57,7 +62,9 @@ export class GuHouse extends AbstractEntity {
     nullable: false,
   })
   rankId: number;
-  @ManyToOne(() => OtherInfo, (rank) => rank.guHouses)
+  @ManyToOne(() => OtherInfo, (rank) => rank.guHouses, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'rank_id',
   })

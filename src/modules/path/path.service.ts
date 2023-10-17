@@ -39,7 +39,7 @@ export class PathService {
 
   async handleGetAllPath(param: any): Promise<HttpResponse> {
     try {
-      const data = await this.pathRepository.findAndCount({
+      const [data, count] = await this.pathRepository.findAndCount({
         where: { id: Not(LessThan(0)) },
         order: { name: 'ASC' },
         take: param.take,
@@ -50,8 +50,10 @@ export class PathService {
         },
       });
 
-      const meta = new MetaDTO(data[1], param.take, param.page);
-      const result = new PageDTO(data[0], meta);
+      const result = new PageDTO(
+        data,
+        new MetaDTO(count, param.take, param.page),
+      );
 
       if (result) {
         return HttpResponse(HttpStatus.OK, '', result);
@@ -116,10 +118,7 @@ export class PathService {
         return HttpResponse(HttpStatus.BAD_REQUEST, ErrorMessage.PATH_EXISTS);
       } else {
         await this.pathRepository.save(data);
-        return HttpResponse(
-          HttpStatus.CREATED,
-          CommonMessage.ADD_PATH_SUCCCEED,
-        );
+        return HttpResponse(HttpStatus.CREATED, CommonMessage.ADD_PATH_SUCCEED);
       }
     } catch (error) {
       return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
@@ -147,7 +146,7 @@ export class PathService {
           });
           return HttpResponse(
             HttpStatus.CREATED,
-            CommonMessage.UPDATE_PATH_SUCCCEED,
+            CommonMessage.UPDATE_PATH_SUCCEED,
           );
         }
       }
@@ -165,7 +164,7 @@ export class PathService {
         await this.pathRepository.delete(param.id);
         return HttpResponse(
           HttpStatus.ACCEPTED,
-          CommonMessage.DELETE_PATH_SUCCCEED,
+          CommonMessage.DELETE_PATH_SUCCEED,
         );
       } else {
         return HttpResponse(HttpStatus.NOT_FOUND, ErrorMessage.PATH_NOT_FOUND);

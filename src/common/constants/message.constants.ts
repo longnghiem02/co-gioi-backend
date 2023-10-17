@@ -1,32 +1,32 @@
 export const CommonMessage = {
   LOGIN_SUCCEED: 'Login succeed!',
-  CREATE_ACCOUNT_SUCCCEED: 'Account successfully created!',
-  UPDATE_ACCOUNT_SUCCCEED: 'Account successfully updated!',
-  DELETE_ACCOUNT_SUCCCEED: 'Delete successfully deleted!',
+  CREATE_ACCOUNT_SUCCEED: 'Account successfully created!',
+  UPDATE_ACCOUNT_SUCCEED: 'Account successfully updated!',
+  DELETE_ACCOUNT_SUCCEED: 'Account successfully deleted!',
 
-  ADD_ROLE_SUCCCEED: 'Role successfully added!',
-  UPDATE_ROLE_SUCCCEED: 'Role successfully updated!',
-  DELETE_ROLE_SUCCCEED: 'Role successfully deleted!',
+  ADD_ROLE_SUCCEED: 'Role successfully added!',
+  UPDATE_ROLE_SUCCEED: 'Role successfully updated!',
+  DELETE_ROLE_SUCCEED: 'Role successfully deleted!',
 
-  ADD_PATH_SUCCCEED: 'Path successfully added!',
-  UPDATE_PATH_SUCCCEED: 'Path successfully updated!',
-  DELETE_PATH_SUCCCEED: 'Path successfully deleted!',
+  ADD_PATH_SUCCEED: 'Path successfully added!',
+  UPDATE_PATH_SUCCEED: 'Path successfully updated!',
+  DELETE_PATH_SUCCEED: 'Path successfully deleted!',
 
-  ADD_OTHER_INFO_SUCCCEED: 'Info successfully added!',
-  UPDATE_OTHER_INFO_SUCCCEED: 'Info successfully updated!',
-  DELETE_OTHER_INFO_SUCCCEED: 'Info successfully deleted!',
+  ADD_OTHER_INFO_SUCCEED: 'Info successfully added!',
+  UPDATE_OTHER_INFO_SUCCEED: 'Info successfully updated!',
+  DELETE_OTHER_INFO_SUCCEED: 'Info successfully deleted!',
 
-  ADD_GU_SUCCCEED: 'Gu successfully added!',
-  UPDATE_GU_SUCCCEED: 'Gu successfully updated!',
-  DELETE_GU_SUCCCEED: 'Gu successfully deleted!',
+  ADD_GU_SUCCEED: 'Gu successfully added!',
+  UPDATE_GU_SUCCEED: 'Gu successfully updated!',
+  DELETE_GU_SUCCEED: 'Gu successfully deleted!',
 
-  ADD_BLAND_GHEAVEN_SUCCCEED: 'Bland - Gheaven successfully added!',
-  UPDATE_BLAND_GHEAVEN_SUCCCEED: 'Bland - Gheaven successfully updated!',
-  DELETE_BLAND_GHEAVEN_SUCCCEED: 'Bland - Gheaven successfully deleted!',
+  ADD_BLAND_GHEAVEN_SUCCEED: 'Bland - Gheaven successfully added!',
+  UPDATE_BLAND_GHEAVEN_SUCCEED: 'Bland - Gheaven successfully updated!',
+  DELETE_BLAND_GHEAVEN_SUCCEED: 'Bland - Gheaven successfully deleted!',
 
-  ADD_SECLUDED_DOMAIN_SUCCCEED: 'Secluded domain successfully added!',
-  UPDATE_SECLUDED_DOMAIN_SUCCCEED: 'Secluded domain successfully updated!',
-  DELETE_SECLUDED_DOMAIN_SUCCCEED: 'Secluded domain successfully deleted!',
+  ADD_SECLUDED_DOMAIN_SUCCEED: 'Secluded domain successfully added!',
+  UPDATE_SECLUDED_DOMAIN_SUCCEED: 'Secluded domain successfully updated!',
+  DELETE_SECLUDED_DOMAIN_SUCCEED: 'Secluded domain successfully deleted!',
 };
 
 export const ErrorMessage = {

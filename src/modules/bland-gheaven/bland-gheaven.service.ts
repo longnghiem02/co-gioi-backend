@@ -52,7 +52,7 @@ export class BlandGheavenService {
 
   async handleGetAllBlandGheaven(param: any): Promise<HttpResponse> {
     try {
-      const data = await this.blandGheavenRepository.findAndCount({
+      const [data, count] = await this.blandGheavenRepository.findAndCount({
         where: {
           pathId: param.path ? param.path : null,
           typeId: param.type ? param.type : null,
@@ -66,8 +66,10 @@ export class BlandGheavenService {
         },
       });
 
-      const meta = new MetaDTO(data[1], param.take, param.page);
-      const result = new PageDTO(data[0], meta);
+      const result = new PageDTO(
+        data,
+        new MetaDTO(count, param.take, param.page),
+      );
 
       if (result) {
         return HttpResponse(HttpStatus.OK, '', result);
@@ -96,7 +98,7 @@ export class BlandGheavenService {
         await this.blandGheavenRepository.save(data);
         return HttpResponse(
           HttpStatus.CREATED,
-          CommonMessage.ADD_BLAND_GHEAVEN_SUCCCEED,
+          CommonMessage.ADD_BLAND_GHEAVEN_SUCCEED,
         );
       }
     } catch (error) {
@@ -130,7 +132,7 @@ export class BlandGheavenService {
           });
           return HttpResponse(
             HttpStatus.CREATED,
-            CommonMessage.UPDATE_BLAND_GHEAVEN_SUCCCEED,
+            CommonMessage.UPDATE_BLAND_GHEAVEN_SUCCEED,
           );
         }
       }
@@ -148,7 +150,7 @@ export class BlandGheavenService {
         await this.blandGheavenRepository.delete(param.id);
         return HttpResponse(
           HttpStatus.ACCEPTED,
-          CommonMessage.DELETE_BLAND_GHEAVEN_SUCCCEED,
+          CommonMessage.DELETE_BLAND_GHEAVEN_SUCCEED,
         );
       } else {
         return HttpResponse(
