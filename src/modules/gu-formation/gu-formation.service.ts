@@ -44,7 +44,10 @@ export class GuFormationService {
       if (result) {
         return HttpResponse(HttpStatus.OK, '', result);
       } else {
-        return HttpResponse(HttpStatus.NOT_FOUND, ErrorMessage.GU_NOT_FOUND);
+        return HttpResponse(
+          HttpStatus.NOT_FOUND,
+          ErrorMessage.GU_FORMATION_NOT_FOUND,
+        );
       }
     } catch (error) {
       return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
@@ -76,7 +79,10 @@ export class GuFormationService {
       if (result) {
         return HttpResponse(HttpStatus.OK, '', result);
       } else {
-        return HttpResponse(HttpStatus.NOT_FOUND, ErrorMessage.GU_NOT_FOUND);
+        return HttpResponse(
+          HttpStatus.NOT_FOUND,
+          ErrorMessage.GU_FORMATION_NOT_FOUND,
+        );
       }
     } catch (error) {
       return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
@@ -86,16 +92,19 @@ export class GuFormationService {
   async handleSearchGuFormation(param: any): Promise<HttpResponse> {
     try {
       const result = await this.guFormationRepository
-        .createQueryBuilder('gus')
-        .select(['gus.id', 'gus.name'])
-        .where('gus.name ILIKE :name', { name: `%${param.name}%` })
+        .createQueryBuilder('gu-formations')
+        .select(['gu-formations.id', 'gu-formations.name'])
+        .where('gu-formations.name ILIKE :name', { name: `%${param.name}%` })
         .limit(param.take)
         .getMany();
 
       if (result) {
         return HttpResponse(HttpStatus.OK, '', result);
       } else {
-        return HttpResponse(HttpStatus.NOT_FOUND, ErrorMessage.GU_NOT_FOUND);
+        return HttpResponse(
+          HttpStatus.NOT_FOUND,
+          ErrorMessage.GU_FORMATION_NOT_FOUND,
+        );
       }
     } catch (error) {
       return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
@@ -108,10 +117,16 @@ export class GuFormationService {
         name: data.name,
       });
       if (check) {
-        return HttpResponse(HttpStatus.BAD_REQUEST, ErrorMessage.GU_EXISTS);
+        return HttpResponse(
+          HttpStatus.BAD_REQUEST,
+          ErrorMessage.GU_FORMATION_EXISTS,
+        );
       } else {
         await this.guFormationRepository.save(data);
-        return HttpResponse(HttpStatus.CREATED, CommonMessage.ADD_GU_SUCCEED);
+        return HttpResponse(
+          HttpStatus.CREATED,
+          CommonMessage.ADD_GU_FORMATION_SUCCEED,
+        );
       }
     } catch (error) {
       return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
@@ -124,13 +139,19 @@ export class GuFormationService {
         id: param.id,
       });
       if (!result) {
-        return HttpResponse(HttpStatus.BAD_REQUEST, ErrorMessage.GU_NOT_FOUND);
+        return HttpResponse(
+          HttpStatus.BAD_REQUEST,
+          ErrorMessage.GU_FORMATION_NOT_FOUND,
+        );
       } else {
         const check = await this.guFormationRepository.findOne({
           where: { id: Not(param.id), name: data.name },
         });
         if (check) {
-          return HttpResponse(HttpStatus.BAD_REQUEST, ErrorMessage.GU_EXISTS);
+          return HttpResponse(
+            HttpStatus.BAD_REQUEST,
+            ErrorMessage.GU_FORMATION_EXISTS,
+          );
         } else {
           await this.guFormationRepository.update(param.id, {
             ...data,
@@ -138,7 +159,7 @@ export class GuFormationService {
           });
           return HttpResponse(
             HttpStatus.CREATED,
-            CommonMessage.UPDATE_GU_SUCCEED,
+            CommonMessage.UPDATE_GU_FORMATION_SUCCEED,
           );
         }
       }
@@ -156,10 +177,13 @@ export class GuFormationService {
         await this.guFormationRepository.delete(param.id);
         return HttpResponse(
           HttpStatus.ACCEPTED,
-          CommonMessage.DELETE_GU_SUCCEED,
+          CommonMessage.DELETE_GU_FORMATION_SUCCEED,
         );
       } else {
-        return HttpResponse(HttpStatus.NOT_FOUND, ErrorMessage.GU_NOT_FOUND);
+        return HttpResponse(
+          HttpStatus.NOT_FOUND,
+          ErrorMessage.GU_FORMATION_NOT_FOUND,
+        );
       }
     } catch (error) {
       return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);

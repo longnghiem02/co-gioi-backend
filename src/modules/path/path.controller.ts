@@ -7,6 +7,7 @@ import {
   Query,
   Body,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { PathService } from './path.service';
 import { Public } from 'src/common/decorators/public.decorator';
 import { Roles } from 'src/common/decorators/roles.decorator';
@@ -16,7 +17,9 @@ import { PaginateDTO } from 'src/common/dto/paginate.dto';
 import { AddPathDTO, UpdatePathDTO } from './dto';
 import { SearchDTO } from 'src/common/dto/search.dto';
 
-@Controller('api')
+@ApiTags('Path')
+@ApiBearerAuth()
+@Controller('path')
 export class PathController {
   constructor(private pathService: PathService) {}
 

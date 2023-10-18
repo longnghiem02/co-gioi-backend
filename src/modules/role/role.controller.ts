@@ -7,6 +7,7 @@ import {
   Query,
   Body,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RoleService } from './role.service';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'src/common/enums/enums';
@@ -14,7 +15,9 @@ import { AddRoleDTO, UpdateRoleDTO } from './dto';
 import { IdDTO } from 'src/common/dto/id.dto';
 import { PaginateDTO } from 'src/common/dto/paginate.dto';
 
-@Controller('api')
+@ApiTags('Role')
+@ApiBearerAuth()
+@Controller('role')
 export class RoleController {
   constructor(private roleService: RoleService) {}
 

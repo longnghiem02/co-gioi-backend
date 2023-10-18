@@ -44,7 +44,10 @@ export class GuHouseService {
       if (result) {
         return HttpResponse(HttpStatus.OK, '', result);
       } else {
-        return HttpResponse(HttpStatus.NOT_FOUND, ErrorMessage.GU_NOT_FOUND);
+        return HttpResponse(
+          HttpStatus.NOT_FOUND,
+          ErrorMessage.GU_HOUSE_NOT_FOUND,
+        );
       }
     } catch (error) {
       return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
@@ -76,7 +79,10 @@ export class GuHouseService {
       if (result) {
         return HttpResponse(HttpStatus.OK, '', result);
       } else {
-        return HttpResponse(HttpStatus.NOT_FOUND, ErrorMessage.GU_NOT_FOUND);
+        return HttpResponse(
+          HttpStatus.NOT_FOUND,
+          ErrorMessage.GU_HOUSE_NOT_FOUND,
+        );
       }
     } catch (error) {
       return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
@@ -86,16 +92,19 @@ export class GuHouseService {
   async handleSearchGuHouse(param: any): Promise<HttpResponse> {
     try {
       const result = await this.guHouseRepository
-        .createQueryBuilder('gus')
-        .select(['gus.id', 'gus.name'])
-        .where('gus.name ILIKE :name', { name: `%${param.name}%` })
+        .createQueryBuilder('gu-houses')
+        .select(['gu-houses.id', 'gu-houses.name'])
+        .where('gu-houses.name ILIKE :name', { name: `%${param.name}%` })
         .limit(param.take)
         .getMany();
 
       if (result) {
         return HttpResponse(HttpStatus.OK, '', result);
       } else {
-        return HttpResponse(HttpStatus.NOT_FOUND, ErrorMessage.GU_NOT_FOUND);
+        return HttpResponse(
+          HttpStatus.NOT_FOUND,
+          ErrorMessage.GU_HOUSE_NOT_FOUND,
+        );
       }
     } catch (error) {
       return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
@@ -106,10 +115,16 @@ export class GuHouseService {
     try {
       const check = await this.guHouseRepository.findOneBy({ name: data.name });
       if (check) {
-        return HttpResponse(HttpStatus.BAD_REQUEST, ErrorMessage.GU_EXISTS);
+        return HttpResponse(
+          HttpStatus.BAD_REQUEST,
+          ErrorMessage.GU_HOUSE_EXISTS,
+        );
       } else {
         await this.guHouseRepository.save(data);
-        return HttpResponse(HttpStatus.CREATED, CommonMessage.ADD_GU_SUCCEED);
+        return HttpResponse(
+          HttpStatus.CREATED,
+          CommonMessage.ADD_GU_HOUSE_SUCCEED,
+        );
       }
     } catch (error) {
       return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
@@ -120,13 +135,19 @@ export class GuHouseService {
     try {
       const result = await this.guHouseRepository.findOneBy({ id: param.id });
       if (!result) {
-        return HttpResponse(HttpStatus.BAD_REQUEST, ErrorMessage.GU_NOT_FOUND);
+        return HttpResponse(
+          HttpStatus.BAD_REQUEST,
+          ErrorMessage.GU_HOUSE_NOT_FOUND,
+        );
       } else {
         const check = await this.guHouseRepository.findOne({
           where: { id: Not(param.id), name: data.name },
         });
         if (check) {
-          return HttpResponse(HttpStatus.BAD_REQUEST, ErrorMessage.GU_EXISTS);
+          return HttpResponse(
+            HttpStatus.BAD_REQUEST,
+            ErrorMessage.GU_HOUSE_EXISTS,
+          );
         } else {
           await this.guHouseRepository.update(param.id, {
             ...data,
@@ -134,7 +155,7 @@ export class GuHouseService {
           });
           return HttpResponse(
             HttpStatus.CREATED,
-            CommonMessage.UPDATE_GU_SUCCEED,
+            CommonMessage.UPDATE_GU_HOUSE_SUCCEED,
           );
         }
       }
@@ -152,10 +173,13 @@ export class GuHouseService {
         await this.guHouseRepository.delete(param.id);
         return HttpResponse(
           HttpStatus.ACCEPTED,
-          CommonMessage.DELETE_GU_SUCCEED,
+          CommonMessage.DELETE_GU_HOUSE_SUCCEED,
         );
       } else {
-        return HttpResponse(HttpStatus.NOT_FOUND, ErrorMessage.GU_NOT_FOUND);
+        return HttpResponse(
+          HttpStatus.NOT_FOUND,
+          ErrorMessage.GU_HOUSE_NOT_FOUND,
+        );
       }
     } catch (error) {
       return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);

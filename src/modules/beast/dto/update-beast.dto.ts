@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
-export class AddBlandGheavenDTO {
+export class UpdateBeastDTO {
   @IsNotEmpty()
   @IsString()
   @ApiProperty({
@@ -25,6 +25,14 @@ export class AddBlandGheavenDTO {
     example: 0,
   })
   typeId: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @ApiProperty({
+    description: 'rankId',
+    example: 0,
+  })
+  rankId: number;
 
   @IsOptional()
   @IsString()

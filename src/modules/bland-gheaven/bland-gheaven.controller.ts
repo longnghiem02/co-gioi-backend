@@ -7,6 +7,7 @@ import {
   Query,
   Body,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { BlandGheavenService } from './bland-gheaven.service';
 import { Public } from 'src/common/decorators/public.decorator';
 import { Roles } from 'src/common/decorators/roles.decorator';
@@ -15,7 +16,9 @@ import { IdDTO } from 'src/common/dto/id.dto';
 import { PaginateDTO } from 'src/common/dto/paginate.dto';
 import { AddBlandGheavenDTO, UpdateBlandGheavenDTO } from './dto';
 
-@Controller('api')
+@ApiTags('Blessed land - Grotto heaven')
+@ApiBearerAuth()
+@Controller('bland-gheaven')
 export class BlandGheavenController {
   constructor(private blandGheavenService: BlandGheavenService) {}
 

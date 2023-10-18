@@ -1,4 +1,5 @@
 export const CommonMessage = {
+  OK: 'Ok',
   LOGIN_SUCCEED: 'Login succeed!',
   CREATE_ACCOUNT_SUCCEED: 'Account successfully created!',
   UPDATE_ACCOUNT_SUCCEED: 'Account successfully updated!',
@@ -19,6 +20,18 @@ export const CommonMessage = {
   ADD_GU_SUCCEED: 'Gu successfully added!',
   UPDATE_GU_SUCCEED: 'Gu successfully updated!',
   DELETE_GU_SUCCEED: 'Gu successfully deleted!',
+
+  ADD_GU_FORMATION_SUCCEED: 'Gu formation successfully added!',
+  UPDATE_GU_FORMATION_SUCCEED: 'Gu formation successfully updated!',
+  DELETE_GU_FORMATION_SUCCEED: 'Gu formation successfully deleted!',
+
+  ADD_GU_HOUSE_SUCCEED: 'Gu house successfully added!',
+  UPDATE_GU_HOUSE_SUCCEED: 'Gu house successfully updated!',
+  DELETE_GU_HOUSE_SUCCEED: 'Gu house successfully deleted!',
+
+  ADD_BEAST_SUCCEED: 'Beast successfully added!',
+  UPDATE_BEAST_SUCCEED: 'Beast successfully updated!',
+  DELETE_BEAST_SUCCEED: 'Beast successfully deleted!',
 
   ADD_BLAND_GHEAVEN_SUCCEED: 'Bland - Gheaven successfully added!',
   UPDATE_BLAND_GHEAVEN_SUCCEED: 'Bland - Gheaven successfully updated!',
@@ -47,6 +60,15 @@ export const ErrorMessage = {
 
   GU_EXISTS: 'Gu is already exists!',
   GU_NOT_FOUND: 'Gu not found!',
+
+  GU_FORMATION_EXISTS: 'Gu formation is already exists!',
+  GU_FORMATION_NOT_FOUND: 'Gu formation not found!',
+
+  GU_HOUSE_EXISTS: 'Gu house is already exists!',
+  GU_HOUSE_NOT_FOUND: 'Gu house not found!',
+
+  BEAST_EXISTS: 'Beast is already exists!',
+  BEAST_NOT_FOUND: 'Beast not found!',
 
   BLAND_GHEAVEN_EXISTS: 'Bland - Gheaven is already exists!',
   BLAND_GHEAVEN_NOT_FOUND: 'Bland - Gheaven not found!',

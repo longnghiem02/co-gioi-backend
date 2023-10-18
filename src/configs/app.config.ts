@@ -2,6 +2,10 @@ import { config } from 'dotenv';
 
 config({ path: (process.cwd(), '.env') });
 
+export const appConfig = {
+  port: process.env.PORT,
+};
+
 export const databaseConfig = {
   type: process.env.DB_TYPE,
   database: process.env.DB_DATABASE,

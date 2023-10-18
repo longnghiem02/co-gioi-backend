@@ -7,6 +7,7 @@ import {
   Query,
   Body,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { GuHouseService } from './gu-house.service';
 import { Public } from 'src/common/decorators/public.decorator';
 import { Roles } from 'src/common/decorators/roles.decorator';
@@ -16,7 +17,9 @@ import { PaginateDTO } from 'src/common/dto/paginate.dto';
 import { AddGuHouseDTO, UpdateGuHouseDTO } from './dto';
 import { SearchDTO } from 'src/common/dto/search.dto';
 
-@Controller('api')
+@ApiTags('Gu house')
+@ApiBearerAuth()
+@Controller('gu-house')
 export class GuHouseController {
   constructor(private guHouseService: GuHouseService) {}
 

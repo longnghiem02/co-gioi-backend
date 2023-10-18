@@ -8,6 +8,7 @@ import {
   Query,
   Body,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Public } from 'src/common/decorators/public.decorator';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'src/common/enums/enums';
@@ -21,7 +22,9 @@ import {
   UpdateAccountDTO,
 } from './dto';
 
-@Controller('api')
+@ApiTags('Account')
+@ApiBearerAuth()
+@Controller('account')
 export class AccountController {
   constructor(private accountService: AccountService) {}
 

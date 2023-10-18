@@ -7,6 +7,7 @@ import {
   Query,
   Body,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { OtherInfoService } from './other-info.service';
 import { Public } from 'src/common/decorators/public.decorator';
 import { Roles } from 'src/common/decorators/roles.decorator';
@@ -15,7 +16,9 @@ import { IdDTO } from 'src/common/dto/id.dto';
 import { PaginateDTO } from 'src/common/dto/paginate.dto';
 import { AddOtherInfoDTO, FilterOtherInfoDTO, UpdateOtherInfoDTO } from './dto';
 
-@Controller('api')
+@ApiTags('Other info')
+@ApiBearerAuth()
+@Controller('other-info')
 export class OtherInfoController {
   constructor(private otherInfoService: OtherInfoService) {}
 
