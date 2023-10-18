@@ -6,14 +6,14 @@ import {
   Delete,
   Query,
   Body,
+  Param,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { OtherInfoService } from './other-info.service';
 import { Public } from 'src/common/decorators/public.decorator';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'src/common/enums/enums';
-import { IdDTO } from 'src/common/dto/id.dto';
-import { PaginateDTO } from 'src/common/dto/paginate.dto';
+import { FilterDTO, IdDTO, PaginateDTO } from 'src/common/dto/';
 import { AddOtherInfoDTO, FilterOtherInfoDTO, UpdateOtherInfoDTO } from './dto';
 
 @ApiTags('Other info')
@@ -30,8 +30,14 @@ export class OtherInfoController {
 
   @Get('get-all-other-info')
   @Public()
-  async getAllOtherInfo(@Query() paginateDTO: PaginateDTO) {
-    return await this.otherInfoService.handleGetAllOtherInfo(paginateDTO);
+  async getAllOtherInfo(
+    @Query() filterDTO: FilterDTO,
+    @Query() paginateDTO: PaginateDTO,
+  ) {
+    return await this.otherInfoService.handleGetAllOtherInfo(
+      filterDTO,
+      paginateDTO,
+    );
   }
 
   @Get('get-all-other-info-name')
@@ -48,10 +54,10 @@ export class OtherInfoController {
     return await this.otherInfoService.handleAddOtherInfo(addOtherInfoDTO);
   }
 
-  @Put('update-other-info')
+  @Put('update-other-info/:id')
   @Roles(Role.ADMIN)
   async updateOtherInfo(
-    @Query() idDTO: IdDTO,
+    @Param() idDTO: IdDTO,
     @Body() updateOtherInfoDTO: UpdateOtherInfoDTO,
   ) {
     return await this.otherInfoService.handleUpdateOtherInfo(
@@ -60,9 +66,9 @@ export class OtherInfoController {
     );
   }
 
-  @Delete('delete-other-info')
+  @Delete('delete-other-info/:id')
   @Roles(Role.ADMIN)
-  async deleteOtherInfo(@Query() idDTO: IdDTO) {
+  async deleteOtherInfo(@Param() idDTO: IdDTO) {
     return await this.otherInfoService.handleDeleteOtherInfo(idDTO);
   }
 }

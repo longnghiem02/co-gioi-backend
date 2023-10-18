@@ -6,7 +6,7 @@ export class IdDTO {
   @IsNotEmpty()
   @ApiProperty({
     description: 'id',
-    example: 0,
+    example: '',
   })
   @Type(() => Number)
   id: number;

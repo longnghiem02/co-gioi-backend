@@ -6,14 +6,14 @@ import {
   Delete,
   Query,
   Body,
+  Param,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { SecludedDomainService } from './secluded-domain.service';
 import { Public } from 'src/common/decorators/public.decorator';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'src/common/enums/enums';
-import { IdDTO } from 'src/common/dto/id.dto';
-import { PaginateDTO } from 'src/common/dto/paginate.dto';
+import { FilterDTO, IdDTO, PaginateDTO } from 'src/common/dto/';
 import { AddSecludedDomainDTO, UpdateSecludedDomainDTO } from './dto';
 
 @ApiTags('Secluded domain')
@@ -30,8 +30,12 @@ export class SecludedDomainController {
 
   @Get('get-all-secluded-domain')
   @Public()
-  async getAllSecludedDomain(@Query() paginateDTO: PaginateDTO) {
+  async getAllSecludedDomain(
+    @Query() filterDTO: FilterDTO,
+    @Query() paginateDTO: PaginateDTO,
+  ) {
     return await this.secludedDomainService.handleGetAllSecludedDomain(
+      filterDTO,
       paginateDTO,
     );
   }
@@ -44,10 +48,10 @@ export class SecludedDomainController {
     );
   }
 
-  @Put('update-secluded-domain')
+  @Put('update-secluded-domain/:id')
   @Roles(Role.ADMIN)
   async updateSecludedDomain(
-    @Query() idDTO: IdDTO,
+    @Param() idDTO: IdDTO,
     @Body() updateSecludedDomainDTO: UpdateSecludedDomainDTO,
   ) {
     return await this.secludedDomainService.handleUpdateSecludedDomain(
@@ -56,9 +60,9 @@ export class SecludedDomainController {
     );
   }
 
-  @Delete('delete-secluded-domain')
+  @Delete('delete-secluded-domain/:id')
   @Roles(Role.ADMIN)
-  async deleteSecludedDomain(@Query() idDTO: IdDTO) {
+  async deleteSecludedDomain(@Param() idDTO: IdDTO) {
     return await this.secludedDomainService.handleDeleteSecludedDomain(idDTO);
   }
 }

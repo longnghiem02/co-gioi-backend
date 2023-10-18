@@ -17,10 +17,10 @@ export class SecludedDomainService {
     private secludedDomainRepository: Repository<SecludedDomain>,
   ) {}
 
-  async handleGetSecludedDomain(param: any): Promise<HttpResponse> {
+  async handleGetSecludedDomain(query: any): Promise<HttpResponse> {
     try {
       const result = await this.secludedDomainRepository.findOne({
-        where: { id: param.id },
+        where: { id: query.id },
         relations: { path: true },
         select: {
           id: true,
@@ -46,13 +46,16 @@ export class SecludedDomainService {
     }
   }
 
-  async handleGetAllSecludedDomain(param: any): Promise<HttpResponse> {
+  async handleGetAllSecludedDomain(
+    filter: any,
+    paginate: any,
+  ): Promise<HttpResponse> {
     try {
       const [data, count] = await this.secludedDomainRepository.findAndCount({
-        where: { pathId: param.path ? param.path : null },
+        where: { pathId: filter.pathId ? filter.pathId : null },
         order: { name: 'ASC' },
-        take: param.take,
-        skip: (param.page - 1) * param.take,
+        take: paginate.take,
+        skip: (paginate.page - 1) * paginate.take,
         select: {
           id: true,
           name: true,
@@ -61,7 +64,7 @@ export class SecludedDomainService {
 
       const result = new PageDTO(
         data,
-        new MetaDTO(count, param.take, param.page),
+        new MetaDTO(count, paginate.take, paginate.page),
       );
 
       if (result) {

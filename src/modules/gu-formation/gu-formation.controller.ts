@@ -6,16 +6,15 @@ import {
   Delete,
   Query,
   Body,
+  Param,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { GuFormationService } from './gu-formation.service';
 import { Public } from 'src/common/decorators/public.decorator';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'src/common/enums/enums';
-import { IdDTO } from 'src/common/dto/id.dto';
-import { PaginateDTO } from 'src/common/dto/paginate.dto';
+import { IdDTO, SearchDTO, PaginateDTO, FilterDTO } from 'src/common/dto';
 import { AddGuFormationDTO, UpdateGuFormationDTO } from './dto';
-import { SearchDTO } from 'src/common/dto/search.dto';
 
 @ApiTags('Gu formation')
 @ApiBearerAuth()
@@ -31,14 +30,26 @@ export class GuFormationController {
 
   @Get('get-all-gu-formation')
   @Public()
-  async getAllGuFormation(@Query() paginateDTO: PaginateDTO) {
-    return await this.guFormationService.handleGetAllGuFormation(paginateDTO);
+  async getAllGuFormation(
+    @Query() filterDTO: FilterDTO,
+    @Query() paginateDTO: PaginateDTO,
+  ) {
+    return await this.guFormationService.handleGetAllGuFormation(
+      filterDTO,
+      paginateDTO,
+    );
   }
 
   @Get('search-gu-formation')
   @Public()
-  async searchGuFormation(@Query() searchDTO: SearchDTO) {
-    return await this.guFormationService.handleSearchGuFormation(searchDTO);
+  async searchGuFormation(
+    @Query() searchDTO: SearchDTO,
+    @Query() paginateDTO: PaginateDTO,
+  ) {
+    return await this.guFormationService.handleSearchGuFormation(
+      searchDTO,
+      paginateDTO,
+    );
   }
 
   @Post('add-gu-formation')
@@ -49,10 +60,10 @@ export class GuFormationController {
     );
   }
 
-  @Put('update-gu-formation')
+  @Put('update-gu-formation/:id')
   @Roles(Role.ADMIN)
   async updateGuFormation(
-    @Query() idDTO: IdDTO,
+    @Param() idDTO: IdDTO,
     @Body() updateGuFormationDTO: UpdateGuFormationDTO,
   ) {
     return await this.guFormationService.handleUpdateGuFormation(
@@ -61,9 +72,9 @@ export class GuFormationController {
     );
   }
 
-  @Delete('delete-gu-formation')
+  @Delete('delete-gu-formation/:id')
   @Roles(Role.ADMIN)
-  async deleteGuFormation(@Query() idDTO: IdDTO) {
+  async deleteGuFormation(@Param() idDTO: IdDTO) {
     return await this.guFormationService.handleDeleteGuFormation(idDTO);
   }
 }

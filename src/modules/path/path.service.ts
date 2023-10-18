@@ -17,10 +17,10 @@ export class PathService {
     private pathRepository: Repository<Path>,
   ) {}
 
-  async handleGetPath(param: any): Promise<HttpResponse> {
+  async handleGetPath(query: any): Promise<HttpResponse> {
     try {
       const result = await this.pathRepository.findOne({
-        where: { id: param.id >= 0 ? param.id : 0 },
+        where: { id: query.id >= 0 ? query.id : 0 },
         select: {
           id: true,
           name: true,
@@ -37,13 +37,13 @@ export class PathService {
     }
   }
 
-  async handleGetAllPath(param: any): Promise<HttpResponse> {
+  async handleGetAllPath(paginate: any): Promise<HttpResponse> {
     try {
       const [data, count] = await this.pathRepository.findAndCount({
         where: { id: Not(LessThan(0)) },
         order: { name: 'ASC' },
-        take: param.take,
-        skip: (param.page - 1) * param.take,
+        take: paginate.take,
+        skip: (paginate.page - 1) * paginate.take,
         select: {
           id: true,
           name: true,
@@ -52,7 +52,7 @@ export class PathService {
 
       const result = new PageDTO(
         data,
-        new MetaDTO(count, param.take, param.page),
+        new MetaDTO(count, paginate.take, paginate.page),
       );
 
       if (result) {
@@ -84,22 +84,24 @@ export class PathService {
     }
   }
 
-  async handleSearchPath(param: any): Promise<HttpResponse> {
+  async handleSearchPath(search: any, paginate: any): Promise<HttpResponse> {
     try {
-      const data = await this.pathRepository
+      const [data, count] = await this.pathRepository
         .createQueryBuilder('paths')
         .select(['paths.id', 'paths.name'])
         .where('paths.name ILIKE :name', {
-          name: param.name ? `%${param.name}%` : '',
+          name: search.name ? `%${search.name}%` : '',
         })
         .andWhere('paths.id > :id', { id: 0 })
-        .limit(param.take)
-        .offset((param.page - 1) * param.take)
+        .limit(paginate.take)
+        .offset((paginate.page - 1) * paginate.take)
         .orderBy('paths.name', 'ASC')
         .getManyAndCount();
 
-      const meta = new MetaDTO(data[1], param.take, param.page);
-      const result = new PageDTO(data[0], meta);
+      const result = new PageDTO(
+        data,
+        new MetaDTO(count, paginate.take, paginate.page),
+      );
 
       if (result) {
         return HttpResponse(HttpStatus.OK, '', result);

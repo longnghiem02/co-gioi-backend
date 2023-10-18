@@ -21,12 +21,12 @@ export class AccountService {
     private passwordService: PasswordService,
   ) {}
 
-  async handleGetAllAccount(param: any): Promise<HttpResponse> {
+  async handleGetAllAccount(paginate: any): Promise<HttpResponse> {
     try {
       const [data, count] = await this.accountRepository.findAndCount({
         order: { username: 'ASC' },
-        take: param.take,
-        skip: (param.page - 1) * param.take,
+        take: paginate.take,
+        skip: (paginate.page - 1) * paginate.take,
         select: {
           id: true,
           username: true,
@@ -36,7 +36,7 @@ export class AccountService {
 
       const result = new PageDTO(
         data,
-        new MetaDTO(count, param.take, param.page),
+        new MetaDTO(count, paginate.take, paginate.page),
       );
 
       if (result) {
@@ -52,10 +52,10 @@ export class AccountService {
     }
   }
 
-  async handleGetAccountInfo(param: any): Promise<HttpResponse> {
+  async handleGetAccountInfo(query: any): Promise<HttpResponse> {
     try {
       const result = await this.accountRepository.findOne({
-        where: { id: param.id },
+        where: { id: query.id },
         select: {
           username: true,
           email: true,

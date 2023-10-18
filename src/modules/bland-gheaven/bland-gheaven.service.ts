@@ -17,10 +17,10 @@ export class BlandGheavenService {
     private blandGheavenRepository: Repository<BlandGheaven>,
   ) {}
 
-  async handleGetBlandGheaven(param: any): Promise<HttpResponse> {
+  async handleGetBlandGheaven(query: any): Promise<HttpResponse> {
     try {
       const result = await this.blandGheavenRepository.findOne({
-        where: { id: param.id },
+        where: { id: query.id },
         relations: { path: true, type: true },
         select: {
           id: true,
@@ -50,16 +50,19 @@ export class BlandGheavenService {
     }
   }
 
-  async handleGetAllBlandGheaven(param: any): Promise<HttpResponse> {
+  async handleGetAllBlandGheaven(
+    filter: any,
+    paginate: any,
+  ): Promise<HttpResponse> {
     try {
       const [data, count] = await this.blandGheavenRepository.findAndCount({
         where: {
-          pathId: param.path ? param.path : null,
-          typeId: param.type ? param.type : null,
+          pathId: filter.pathId ? filter.pathId : null,
+          typeId: filter.typeId ? filter.typeId : null,
         },
         order: { name: 'ASC' },
-        take: param.take,
-        skip: (param.page - 1) * param.take,
+        take: paginate.take,
+        skip: (paginate.page - 1) * paginate.take,
         select: {
           id: true,
           name: true,
@@ -68,7 +71,7 @@ export class BlandGheavenService {
 
       const result = new PageDTO(
         data,
-        new MetaDTO(count, param.take, param.page),
+        new MetaDTO(count, paginate.take, paginate.page),
       );
 
       if (result) {

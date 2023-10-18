@@ -17,10 +17,10 @@ export class OtherInfoService {
     private otherInfoRepository: Repository<OtherInfo>,
   ) {}
 
-  async handleGetOtherInfo(param: any): Promise<HttpResponse> {
+  async handleGetOtherInfo(query: any): Promise<HttpResponse> {
     try {
       const result = await this.otherInfoRepository.findOne({
-        where: { id: param.id >= 0 ? param.id : 0 },
+        where: { id: query.id >= 0 ? query.id : 0 },
         select: {
           id: true,
           name: true,
@@ -40,13 +40,16 @@ export class OtherInfoService {
     }
   }
 
-  async handleGetAllOtherInfo(param: any): Promise<HttpResponse> {
+  async handleGetAllOtherInfo(
+    filter: any,
+    paginate: any,
+  ): Promise<HttpResponse> {
     try {
       const [data, count] = await this.otherInfoRepository.findAndCount({
-        where: { id: Not(LessThan(0)), type: param.type ? param.type : null },
+        where: { id: Not(LessThan(0)), type: filter.type ? filter.type : null },
         order: { name: 'ASC' },
-        take: param.take,
-        skip: (param.page - 1) * param.take,
+        take: paginate.take,
+        skip: (paginate.page - 1) * paginate.take,
         select: {
           id: true,
           name: true,
@@ -55,7 +58,7 @@ export class OtherInfoService {
 
       const result = new PageDTO(
         data,
-        new MetaDTO(count, param.take, param.page),
+        new MetaDTO(count, paginate.take, paginate.page),
       );
 
       if (result) {
@@ -71,11 +74,11 @@ export class OtherInfoService {
     }
   }
 
-  async handleGetAllOtherInfoName(param: any): Promise<HttpResponse> {
+  async handleGetAllOtherInfoName(filter: any): Promise<HttpResponse> {
     try {
       const result = await this.otherInfoRepository.find({
         where: [
-          { type: param?.type ? param.type : null },
+          { type: filter?.type ? filter.type : null },
           { type: 'none' },
           { type: 'unknown' },
         ],

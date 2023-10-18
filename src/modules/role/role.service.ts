@@ -15,10 +15,10 @@ export class RoleService {
     private roleRepository: Repository<Role>,
   ) {}
 
-  async handleGetRole(param: any): Promise<HttpResponse> {
+  async handleGetRole(query: any): Promise<HttpResponse> {
     try {
       const result = await this.roleRepository.findOne({
-        where: { id: param.id },
+        where: { id: query.id },
         select: {
           name: true,
           detail: true,
@@ -34,12 +34,12 @@ export class RoleService {
     }
   }
 
-  async handleGetAllRole(param: any): Promise<HttpResponse> {
+  async handleGetAllRole(paginate: any): Promise<HttpResponse> {
     try {
       const result = await this.roleRepository.find({
         order: { name: 'ASC' },
-        take: param.take,
-        skip: (param.page - 1) * param.take,
+        take: paginate.take,
+        skip: (paginate.page - 1) * paginate.take,
         select: {
           id: true,
           name: true,

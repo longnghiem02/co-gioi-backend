@@ -7,14 +7,14 @@ import {
   Request,
   Query,
   Body,
+  Param,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Public } from 'src/common/decorators/public.decorator';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'src/common/enums/enums';
 import { AccountService } from './account.service';
-import { IdDTO } from 'src/common/dto/id.dto';
-import { PaginateDTO } from 'src/common/dto/paginate.dto';
+import { IdDTO, PaginateDTO } from 'src/common/dto';
 import {
   SignInDTO,
   SignUpDTO,
@@ -79,9 +79,9 @@ export class AccountController {
     );
   }
 
-  @Delete('delete-account')
+  @Delete('delete-account/:id')
   @Roles(Role.ADMIN)
-  deleteAccount(@Query() idDTO: IdDTO) {
+  deleteAccount(@Param() idDTO: IdDTO) {
     return this.accountService.handleDeleteAccount(idDTO);
   }
 }

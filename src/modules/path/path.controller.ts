@@ -6,6 +6,7 @@ import {
   Delete,
   Query,
   Body,
+  Param,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { PathService } from './path.service';
@@ -43,8 +44,11 @@ export class PathController {
 
   @Get('search-path')
   @Public()
-  async searchGu(@Query() searchDTO: SearchDTO) {
-    return await this.pathService.handleSearchPath(searchDTO);
+  async searchGu(
+    @Query() searchDTO: SearchDTO,
+    @Query() paginateDTO: PaginateDTO,
+  ) {
+    return await this.pathService.handleSearchPath(searchDTO, paginateDTO);
   }
 
   @Post('add-path')
@@ -53,18 +57,18 @@ export class PathController {
     return await this.pathService.handleAddPath(addPathDTO);
   }
 
-  @Put('update-path')
+  @Put('update-path/:id')
   @Roles(Role.ADMIN)
   async updatePath(
-    @Query() idDTO: IdDTO,
+    @Param() idDTO: IdDTO,
     @Body() updatePathDTO: UpdatePathDTO,
   ) {
     return await this.pathService.handleUpdatePath(idDTO, updatePathDTO);
   }
 
-  @Delete('delete-path')
+  @Delete('delete-path/:id')
   @Roles(Role.ADMIN)
-  async deletePath(@Query() idDTO: IdDTO) {
+  async deletePath(@Param() idDTO: IdDTO) {
     return await this.pathService.handleDeletePath(idDTO);
   }
 }

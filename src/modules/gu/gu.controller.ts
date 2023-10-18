@@ -6,16 +6,15 @@ import {
   Delete,
   Query,
   Body,
+  Param,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { GuService } from './gu.service';
 import { Public } from 'src/common/decorators/public.decorator';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'src/common/enums/enums';
-import { IdDTO } from 'src/common/dto/id.dto';
-import { PaginateDTO } from 'src/common/dto/paginate.dto';
+import { IdDTO, SearchDTO, PaginateDTO, FilterDTO } from 'src/common/dto';
 import { AddGuDTO, UpdateGuDTO } from './dto';
-import { SearchDTO } from 'src/common/dto/search.dto';
 
 @ApiTags('Gu')
 @ApiBearerAuth()
@@ -31,14 +30,20 @@ export class GuController {
 
   @Get('get-all-gu')
   @Public()
-  async getAllGu(@Query() paginateDTO: PaginateDTO) {
-    return await this.guService.handleGetAllGu(paginateDTO);
+  async getAllGu(
+    @Query() filterDTO: FilterDTO,
+    @Query() paginateDTO: PaginateDTO,
+  ) {
+    return await this.guService.handleGetAllGu(filterDTO, paginateDTO);
   }
 
   @Get('search-gu')
   @Public()
-  async searchGu(@Query() searchDTO: SearchDTO) {
-    return await this.guService.handleSearchGu(searchDTO);
+  async searchGu(
+    @Query() searchDTO: SearchDTO,
+    @Query() paginateDTO: PaginateDTO,
+  ) {
+    return await this.guService.handleSearchGu(searchDTO, paginateDTO);
   }
 
   @Post('add-gu')
@@ -47,15 +52,15 @@ export class GuController {
     return await this.guService.handleAddGu(addGuDTO);
   }
 
-  @Put('update-gu')
+  @Put('update-gu/:id')
   @Roles(Role.ADMIN)
-  async updateGu(@Query() idDTO: IdDTO, @Body() updateGuDTO: UpdateGuDTO) {
+  async updateGu(@Param() idDTO: IdDTO, @Body() updateGuDTO: UpdateGuDTO) {
     return await this.guService.handleUpdateGu(idDTO, updateGuDTO);
   }
 
-  @Delete('delete-gu')
+  @Delete('delete-gu/:id')
   @Roles(Role.ADMIN)
-  async deleteGu(@Query() idDTO: IdDTO) {
+  async deleteGu(@Param() idDTO: IdDTO) {
     return await this.guService.handleDeleteGu(idDTO);
   }
 }

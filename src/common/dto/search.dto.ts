@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsOptional, IsString } from 'class-validator';
 
 export class SearchDTO {
   @IsOptional()
@@ -10,20 +9,4 @@ export class SearchDTO {
     example: 'Example',
   })
   name: string;
-
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'take',
-    example: 6,
-  })
-  @Type(() => Number)
-  take: number;
-
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'page',
-    example: 1,
-  })
-  @Type(() => Number)
-  page: number;
 }

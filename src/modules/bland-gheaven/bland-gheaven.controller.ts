@@ -6,14 +6,14 @@ import {
   Delete,
   Query,
   Body,
+  Param,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { BlandGheavenService } from './bland-gheaven.service';
 import { Public } from 'src/common/decorators/public.decorator';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'src/common/enums/enums';
-import { IdDTO } from 'src/common/dto/id.dto';
-import { PaginateDTO } from 'src/common/dto/paginate.dto';
+import { IdDTO, FilterDTO, PaginateDTO } from 'src/common/dto';
 import { AddBlandGheavenDTO, UpdateBlandGheavenDTO } from './dto';
 
 @ApiTags('Blessed land - Grotto heaven')
@@ -30,8 +30,14 @@ export class BlandGheavenController {
 
   @Get('get-all-bland-gheaven')
   @Public()
-  async getAllBlandGheaven(@Query() paginateDTO: PaginateDTO) {
-    return await this.blandGheavenService.handleGetAllBlandGheaven(paginateDTO);
+  async getAllBlandGheaven(
+    @Query() filterDTO: FilterDTO,
+    @Query() paginateDTO: PaginateDTO,
+  ) {
+    return await this.blandGheavenService.handleGetAllBlandGheaven(
+      filterDTO,
+      paginateDTO,
+    );
   }
 
   @Post('add-bland-gheaven')
@@ -42,10 +48,10 @@ export class BlandGheavenController {
     );
   }
 
-  @Put('update-bland-gheaven')
+  @Put('update-bland-gheaven/:id')
   @Roles(Role.ADMIN)
   async updateBlandGheaven(
-    @Query() idDTO: IdDTO,
+    @Param() idDTO: IdDTO,
     @Body() updateBlandGheavenDTO: UpdateBlandGheavenDTO,
   ) {
     return await this.blandGheavenService.handleUpdateBlandGheaven(
@@ -54,9 +60,9 @@ export class BlandGheavenController {
     );
   }
 
-  @Delete('delete-bland-gheaven')
+  @Delete('delete-bland-gheaven/:id')
   @Roles(Role.ADMIN)
-  async deleteBlandGheaven(@Query() idDTO: IdDTO) {
+  async deleteBlandGheaven(@Param() idDTO: IdDTO) {
     return await this.blandGheavenService.handleDeleteBlandGheaven(idDTO);
   }
 }
