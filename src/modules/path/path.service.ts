@@ -1,6 +1,6 @@
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LessThan, Not, Repository } from 'typeorm';
+import { ILike, LessThan, MoreThan, Not, Repository } from 'typeorm';
 import { Path } from './model/path.model';
 import { HttpResponse } from 'src/configs/HttpResponse.config';
 import { MetaDTO } from 'src/common/dto/meta.dto';
@@ -86,17 +86,16 @@ export class PathService {
 
   async handleSearchPath(search: any, paginate: any): Promise<HttpResponse> {
     try {
-      const [data, count] = await this.pathRepository
-        .createQueryBuilder('paths')
-        .select(['paths.id', 'paths.name'])
-        .where('paths.name ILIKE :name', {
-          name: search.name ? `%${search.name}%` : '',
-        })
-        .andWhere('paths.id > :id', { id: 0 })
-        .limit(paginate.take)
-        .offset((paginate.page - 1) * paginate.take)
-        .orderBy('paths.name', 'ASC')
-        .getManyAndCount();
+      const [data, count] = await this.pathRepository.findAndCount({
+        where: { id: MoreThan(0), name: ILike(`%${search.name}%`) },
+        order: { name: 'ASC' },
+        take: paginate.take,
+        skip: (paginate.page - 1) * paginate.take,
+        select: {
+          id: true,
+          name: true,
+        },
+      });
 
       const result = new PageDTO(
         data,
@@ -142,10 +141,7 @@ export class PathService {
         if (check) {
           return HttpResponse(HttpStatus.BAD_REQUEST, ErrorMessage.PATH_EXISTS);
         } else {
-          await this.pathRepository.update(param.id, {
-            ...data,
-            updatedAt: new Date(),
-          });
+          await this.pathRepository.update(param.id, data);
           return HttpResponse(
             HttpStatus.CREATED,
             CommonMessage.UPDATE_PATH_SUCCEED,

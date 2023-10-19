@@ -22,13 +22,13 @@ import { AddOtherInfoDTO, FilterOtherInfoDTO, UpdateOtherInfoDTO } from './dto';
 export class OtherInfoController {
   constructor(private otherInfoService: OtherInfoService) {}
 
-  @Get('get-other-info')
+  @Get('get')
   @Public()
   async getOtherInfo(@Query() idDTO: IdDTO) {
     return await this.otherInfoService.handleGetOtherInfo(idDTO);
   }
 
-  @Get('get-all-other-info')
+  @Get('get-all')
   @Public()
   async getAllOtherInfo(
     @Query() filterDTO: FilterDTO,
@@ -40,7 +40,7 @@ export class OtherInfoController {
     );
   }
 
-  @Get('get-all-other-info-name')
+  @Get('get-all-name')
   @Roles(Role.ADMIN)
   async getAllOtherInfoName(@Query() filterOtherInfoDTO: FilterOtherInfoDTO) {
     return await this.otherInfoService.handleGetAllOtherInfoName(
@@ -48,13 +48,13 @@ export class OtherInfoController {
     );
   }
 
-  @Post('add-other-info')
+  @Post('add')
   @Roles(Role.ADMIN)
   async addOtherInfo(@Body() addOtherInfoDTO: AddOtherInfoDTO) {
     return await this.otherInfoService.handleAddOtherInfo(addOtherInfoDTO);
   }
 
-  @Put('update-other-info/:id')
+  @Put('update/:id')
   @Roles(Role.ADMIN)
   async updateOtherInfo(
     @Param() idDTO: IdDTO,
@@ -66,7 +66,7 @@ export class OtherInfoController {
     );
   }
 
-  @Delete('delete-other-info/:id')
+  @Delete('delete/:id')
   @Roles(Role.ADMIN)
   async deleteOtherInfo(@Param() idDTO: IdDTO) {
     return await this.otherInfoService.handleDeleteOtherInfo(idDTO);

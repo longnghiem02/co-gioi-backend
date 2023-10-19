@@ -1,6 +1,6 @@
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Not, Repository } from 'typeorm';
+import { ILike, Not, Repository } from 'typeorm';
 import { HttpResponse } from 'src/configs/HttpResponse.config';
 import { GuFormation } from './model/gu-formation.model';
 import { MetaDTO } from 'src/common/dto/meta.dto';
@@ -97,14 +97,16 @@ export class GuFormationService {
     paginate: any,
   ): Promise<HttpResponse> {
     try {
-      const [data, count] = await this.guFormationRepository
-        .createQueryBuilder('gu-formations')
-        .select(['gu-formations.id', 'gu-formations.name'])
-        .where('gu-formations.name ILIKE :name', { name: `%${search.name}%` })
-        .limit(paginate.take)
-        .offset((paginate.page - 1) * paginate.take)
-        .orderBy('gu-formations.name', 'ASC')
-        .getManyAndCount();
+      const [data, count] = await this.guFormationRepository.findAndCount({
+        where: { name: ILike(`%${search.name}%`) },
+        order: { name: 'ASC' },
+        take: paginate.take,
+        skip: (paginate.page - 1) * paginate.take,
+        select: {
+          id: true,
+          name: true,
+        },
+      });
 
       const result = new PageDTO(
         data,
@@ -166,10 +168,7 @@ export class GuFormationService {
             ErrorMessage.GU_FORMATION_EXISTS,
           );
         } else {
-          await this.guFormationRepository.update(param.id, {
-            ...data,
-            updatedAt: new Date(),
-          });
+          await this.guFormationRepository.update(param.id, data);
           return HttpResponse(
             HttpStatus.CREATED,
             CommonMessage.UPDATE_GU_FORMATION_SUCCEED,

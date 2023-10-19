@@ -22,13 +22,13 @@ import { AddBeastDTO, UpdateBeastDTO } from './dto';
 export class BeastController {
   constructor(private guService: BeastService) {}
 
-  @Get('get-beast')
+  @Get('get')
   @Public()
   async getBeast(@Query() idDTO: IdDTO) {
     return await this.guService.handleGetBeast(idDTO);
   }
 
-  @Get('get-all-beast')
+  @Get('get-all')
   @Public()
   async getAllBeast(
     @Query() filterDTO: FilterDTO,
@@ -37,7 +37,7 @@ export class BeastController {
     return await this.guService.handleGetAllBeast(filterDTO, paginateDTO);
   }
 
-  @Get('search-beast')
+  @Get('search')
   @Public()
   async searchBeast(
     @Query() searchDTO: SearchDTO,
@@ -46,13 +46,13 @@ export class BeastController {
     return await this.guService.handleSearchBeast(searchDTO, paginateDTO);
   }
 
-  @Post('add-beast')
+  @Post('add')
   @Roles(Role.ADMIN)
   async addBeast(@Body() addBeastDTO: AddBeastDTO) {
     return await this.guService.handleAddBeast(addBeastDTO);
   }
 
-  @Put('update-beast/:id')
+  @Put('update/:id')
   @Roles(Role.ADMIN)
   async updateBeast(
     @Param() idDTO: IdDTO,
@@ -61,7 +61,7 @@ export class BeastController {
     return await this.guService.handleUpdateBeast(idDTO, updateBeastDTO);
   }
 
-  @Delete('delete-beast/:id')
+  @Delete('delete/:id')
   @Roles(Role.ADMIN)
   async deleteBeast(@Param() idDTO: IdDTO) {
     return await this.guService.handleDeleteBeast(idDTO);

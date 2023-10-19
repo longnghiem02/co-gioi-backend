@@ -125,10 +125,7 @@ export class SecludedDomainService {
             ErrorMessage.SECLUDED_DOMAIN_EXISTS,
           );
         } else {
-          await this.secludedDomainRepository.update(param.id, {
-            ...data,
-            updatedAt: new Date(),
-          });
+          await this.secludedDomainRepository.update(param.id, data);
           return HttpResponse(
             HttpStatus.CREATED,
             CommonMessage.UPDATE_SECLUDED_DOMAIN_SUCCEED,

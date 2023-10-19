@@ -22,13 +22,13 @@ import { AddSecludedDomainDTO, UpdateSecludedDomainDTO } from './dto';
 export class SecludedDomainController {
   constructor(private secludedDomainService: SecludedDomainService) {}
 
-  @Get('get-secluded-domain')
+  @Get('get')
   @Public()
   async getSecludedDomain(@Query() idDTO: IdDTO) {
     return await this.secludedDomainService.handleGetSecludedDomain(idDTO);
   }
 
-  @Get('get-all-secluded-domain')
+  @Get('get-all')
   @Public()
   async getAllSecludedDomain(
     @Query() filterDTO: FilterDTO,
@@ -40,7 +40,7 @@ export class SecludedDomainController {
     );
   }
 
-  @Post('add-secluded-domain')
+  @Post('add')
   @Roles(Role.ADMIN)
   async addSecludedDomain(@Body() addSecludedDomainDTO: AddSecludedDomainDTO) {
     return await this.secludedDomainService.handleAddSecludedDomain(
@@ -48,7 +48,7 @@ export class SecludedDomainController {
     );
   }
 
-  @Put('update-secluded-domain/:id')
+  @Put('update/:id')
   @Roles(Role.ADMIN)
   async updateSecludedDomain(
     @Param() idDTO: IdDTO,
@@ -60,7 +60,7 @@ export class SecludedDomainController {
     );
   }
 
-  @Delete('delete-secluded-domain/:id')
+  @Delete('delete/:id')
   @Roles(Role.ADMIN)
   async deleteSecludedDomain(@Param() idDTO: IdDTO) {
     return await this.secludedDomainService.handleDeleteSecludedDomain(idDTO);

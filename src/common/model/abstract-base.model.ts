@@ -1,16 +1,15 @@
 import {
   BaseEntity,
-  BeforeUpdate,
-  Column,
-  Index,
+  CreateDateColumn,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 export abstract class AbstractEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({
+  @CreateDateColumn({
     name: 'created_at',
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
@@ -18,17 +17,11 @@ export abstract class AbstractEntity extends BaseEntity {
   })
   createdAt: Date;
 
-  @Index()
-  @Column({
+  @UpdateDateColumn({
     name: 'updated_at',
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
     nullable: false,
   })
   updatedAt: Date;
-
-  @BeforeUpdate()
-  changeUpdatedAt() {
-    this.updatedAt = new Date();
-  }
 }

@@ -22,13 +22,13 @@ import { AddGuFormationDTO, UpdateGuFormationDTO } from './dto';
 export class GuFormationController {
   constructor(private guFormationService: GuFormationService) {}
 
-  @Get('get-gu-formation')
+  @Get('get')
   @Public()
   async getGuFormation(@Query() idDTO: IdDTO) {
     return await this.guFormationService.handleGetGuFormation(idDTO);
   }
 
-  @Get('get-all-gu-formation')
+  @Get('get-all')
   @Public()
   async getAllGuFormation(
     @Query() filterDTO: FilterDTO,
@@ -40,7 +40,7 @@ export class GuFormationController {
     );
   }
 
-  @Get('search-gu-formation')
+  @Get('search')
   @Public()
   async searchGuFormation(
     @Query() searchDTO: SearchDTO,
@@ -52,7 +52,7 @@ export class GuFormationController {
     );
   }
 
-  @Post('add-gu-formation')
+  @Post('add')
   @Roles(Role.ADMIN)
   async addGuFormation(@Body() addGuFormationDTO: AddGuFormationDTO) {
     return await this.guFormationService.handleAddGuFormation(
@@ -60,7 +60,7 @@ export class GuFormationController {
     );
   }
 
-  @Put('update-gu-formation/:id')
+  @Put('update/:id')
   @Roles(Role.ADMIN)
   async updateGuFormation(
     @Param() idDTO: IdDTO,
@@ -72,7 +72,7 @@ export class GuFormationController {
     );
   }
 
-  @Delete('delete-gu-formation/:id')
+  @Delete('delete/:id')
   @Roles(Role.ADMIN)
   async deleteGuFormation(@Param() idDTO: IdDTO) {
     return await this.guFormationService.handleDeleteGuFormation(idDTO);

@@ -22,13 +22,13 @@ import { AddGuDTO, UpdateGuDTO } from './dto';
 export class GuController {
   constructor(private guService: GuService) {}
 
-  @Get('get-gu')
+  @Get('get')
   @Public()
   async getGu(@Query() idDTO: IdDTO) {
     return await this.guService.handleGetGu(idDTO);
   }
 
-  @Get('get-all-gu')
+  @Get('get-all')
   @Public()
   async getAllGu(
     @Query() filterDTO: FilterDTO,
@@ -37,7 +37,7 @@ export class GuController {
     return await this.guService.handleGetAllGu(filterDTO, paginateDTO);
   }
 
-  @Get('search-gu')
+  @Get('search')
   @Public()
   async searchGu(
     @Query() searchDTO: SearchDTO,
@@ -46,19 +46,19 @@ export class GuController {
     return await this.guService.handleSearchGu(searchDTO, paginateDTO);
   }
 
-  @Post('add-gu')
+  @Post('add')
   @Roles(Role.ADMIN)
   async addGu(@Body() addGuDTO: AddGuDTO) {
     return await this.guService.handleAddGu(addGuDTO);
   }
 
-  @Put('update-gu/:id')
+  @Put('update/:id')
   @Roles(Role.ADMIN)
   async updateGu(@Param() idDTO: IdDTO, @Body() updateGuDTO: UpdateGuDTO) {
     return await this.guService.handleUpdateGu(idDTO, updateGuDTO);
   }
 
-  @Delete('delete-gu/:id')
+  @Delete('delete/:id')
   @Roles(Role.ADMIN)
   async deleteGu(@Param() idDTO: IdDTO) {
     return await this.guService.handleDeleteGu(idDTO);

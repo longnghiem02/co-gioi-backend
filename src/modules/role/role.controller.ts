@@ -22,31 +22,31 @@ import { PaginateDTO } from 'src/common/dto/paginate.dto';
 export class RoleController {
   constructor(private roleService: RoleService) {}
 
-  @Get('get-role')
+  @Get('get')
   @Roles(Role.ADMIN)
   async getRole(@Query() idDTO: IdDTO) {
     return await this.roleService.handleGetRole(idDTO);
   }
 
-  @Get('get-all-role')
+  @Get('get-all')
   @Roles(Role.ADMIN)
   async getAllRole(@Query() paginateDTO: PaginateDTO) {
     return await this.roleService.handleGetAllRole(paginateDTO);
   }
 
-  @Get('get-all-role-name')
+  @Get('get-all-name')
   @Roles(Role.ADMIN)
   async getAllRoleName() {
     return await this.roleService.handleGetAllRoleName();
   }
 
-  @Post('add-role')
+  @Post('add')
   @Roles(Role.ADMIN)
   async addRole(@Body() addRoleDTO: AddRoleDTO) {
     return await this.roleService.handleAddRole(addRoleDTO);
   }
 
-  @Put('update-role/:id')
+  @Put('update/:id')
   @Roles(Role.ADMIN)
   async updateRole(
     @Param() idDTO: IdDTO,
@@ -55,7 +55,7 @@ export class RoleController {
     return await this.roleService.handleUpdateRole(idDTO, updateRoleDTO);
   }
 
-  @Delete('delete-role/:id')
+  @Delete('delete/:id')
   @Roles(Role.ADMIN)
   async deleteRole(@Param() idDTO: IdDTO) {
     return await this.roleService.handleDeleteRole(idDTO);

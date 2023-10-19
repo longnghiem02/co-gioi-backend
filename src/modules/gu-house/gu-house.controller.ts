@@ -22,13 +22,13 @@ import { AddGuHouseDTO, UpdateGuHouseDTO } from './dto';
 export class GuHouseController {
   constructor(private guHouseService: GuHouseService) {}
 
-  @Get('get-gu-house')
+  @Get('get')
   @Public()
   async getGuHouse(@Query() idDTO: IdDTO) {
     return await this.guHouseService.handleGetGuHouse(idDTO);
   }
 
-  @Get('get-all-gu-house')
+  @Get('get-all')
   @Public()
   async getAllGuHouse(
     @Query() filterDTO: FilterDTO,
@@ -40,7 +40,7 @@ export class GuHouseController {
     );
   }
 
-  @Get('search-gu-house')
+  @Get('search')
   @Public()
   async searchGuHouse(
     @Query() searchDTO: SearchDTO,
@@ -52,13 +52,13 @@ export class GuHouseController {
     );
   }
 
-  @Post('add-gu-house')
+  @Post('add')
   @Roles(Role.ADMIN)
   async addGuHouse(@Body() addGuHouseDTO: AddGuHouseDTO) {
     return await this.guHouseService.handleAddGuHouse(addGuHouseDTO);
   }
 
-  @Put('update-gu-house/:id')
+  @Put('update/:id')
   @Roles(Role.ADMIN)
   async updateGuHouse(
     @Param() idDTO: IdDTO,
@@ -70,7 +70,7 @@ export class GuHouseController {
     );
   }
 
-  @Delete('delete-gu-house/:id')
+  @Delete('delete/:id')
   @Roles(Role.ADMIN)
   async deleteGuHouse(@Param() idDTO: IdDTO) {
     return await this.guHouseService.handleDeleteGuHouse(idDTO);

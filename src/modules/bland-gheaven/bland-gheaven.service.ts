@@ -129,10 +129,7 @@ export class BlandGheavenService {
             ErrorMessage.BLAND_GHEAVEN_EXISTS,
           );
         } else {
-          await this.blandGheavenRepository.update(param.id, {
-            ...data,
-            updatedAt: new Date(),
-          });
+          await this.blandGheavenRepository.update(param.id, data);
           return HttpResponse(
             HttpStatus.CREATED,
             CommonMessage.UPDATE_BLAND_GHEAVEN_SUCCEED,

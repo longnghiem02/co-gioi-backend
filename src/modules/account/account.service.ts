@@ -185,10 +185,7 @@ export class AccountService {
             ErrorMessage.EMAIL_HAS_BEEN_USED,
           );
         } else {
-          await this.accountRepository.update(account.id, {
-            ...data,
-            updatedAt: new Date(),
-          });
+          await this.accountRepository.update(account.id, data);
           return HttpResponse(
             HttpStatus.CREATED,
             CommonMessage.UPDATE_ACCOUNT_SUCCEED,
@@ -221,7 +218,6 @@ export class AccountService {
           );
           await this.accountRepository.update(account.id, {
             password: hashPassword,
-            updatedAt: new Date(),
           });
           return HttpResponse(
             HttpStatus.CREATED,

@@ -1,6 +1,6 @@
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Not, Repository } from 'typeorm';
+import { ILike, Not, Repository } from 'typeorm';
 import { Beast } from './model/beast.model';
 import { HttpResponse } from 'src/configs/HttpResponse.config';
 import { MetaDTO } from 'src/common/dto/meta.dto';
@@ -85,14 +85,16 @@ export class BeastService {
 
   async handleSearchBeast(search: any, paginate: any): Promise<HttpResponse> {
     try {
-      const [data, count] = await this.beastRepository
-        .createQueryBuilder('beasts')
-        .select(['beasts.id', 'beasts.name'])
-        .where('beasts.name ILIKE :name', { name: `%${search.name}%` })
-        .limit(paginate.take)
-        .offset((paginate.page - 1) * paginate.take)
-        .orderBy('beasts.name', 'ASC')
-        .getManyAndCount();
+      const [data, count] = await this.beastRepository.findAndCount({
+        where: { name: ILike(`%${search.name}%`) },
+        order: { name: 'ASC' },
+        take: paginate.take,
+        skip: (paginate.page - 1) * paginate.take,
+        select: {
+          id: true,
+          name: true,
+        },
+      });
 
       const result = new PageDTO(
         data,
@@ -144,10 +146,7 @@ export class BeastService {
             ErrorMessage.BEAST_EXISTS,
           );
         } else {
-          await this.beastRepository.update(param.id, {
-            ...data,
-            updatedAt: new Date(),
-          });
+          await this.beastRepository.update(param.id, data);
           return HttpResponse(
             HttpStatus.CREATED,
             CommonMessage.UPDATE_BEAST_SUCCEED,

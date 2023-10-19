@@ -1,6 +1,6 @@
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Not, Repository } from 'typeorm';
+import { ILike, Not, Repository } from 'typeorm';
 import { Gu } from './model/gu.model';
 import { HttpResponse } from 'src/configs/HttpResponse.config';
 import { MetaDTO } from 'src/common/dto/meta.dto';
@@ -85,14 +85,16 @@ export class GuService {
 
   async handleSearchGu(search: any, paginate: any): Promise<HttpResponse> {
     try {
-      const [data, count] = await this.guRepository
-        .createQueryBuilder('gus')
-        .select(['gus.id', 'gus.name'])
-        .where('gus.name ILIKE :name', { name: `%${search.name}%` })
-        .limit(paginate.take)
-        .offset((paginate.page - 1) * paginate.take)
-        .orderBy('gus.name', 'ASC')
-        .getManyAndCount();
+      const [data, count] = await this.guRepository.findAndCount({
+        where: { name: ILike(`%${search.name}%`) },
+        order: { name: 'ASC' },
+        take: paginate.take,
+        skip: (paginate.page - 1) * paginate.take,
+        select: {
+          id: true,
+          name: true,
+        },
+      });
 
       const result = new PageDTO(
         data,
@@ -135,10 +137,7 @@ export class GuService {
         if (check) {
           return HttpResponse(HttpStatus.BAD_REQUEST, ErrorMessage.GU_EXISTS);
         } else {
-          await this.guRepository.update(param.id, {
-            ...data,
-            updatedAt: new Date(),
-          });
+          await this.guRepository.update(param.id, data);
           return HttpResponse(
             HttpStatus.CREATED,
             CommonMessage.UPDATE_GU_SUCCEED,

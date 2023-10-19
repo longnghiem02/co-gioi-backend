@@ -22,13 +22,13 @@ import { AddBlandGheavenDTO, UpdateBlandGheavenDTO } from './dto';
 export class BlandGheavenController {
   constructor(private blandGheavenService: BlandGheavenService) {}
 
-  @Get('get-bland-gheaven')
+  @Get('get')
   @Public()
   async getBlandGheaven(@Query() idDTO: IdDTO) {
     return await this.blandGheavenService.handleGetBlandGheaven(idDTO);
   }
 
-  @Get('get-all-bland-gheaven')
+  @Get('get-all')
   @Public()
   async getAllBlandGheaven(
     @Query() filterDTO: FilterDTO,
@@ -40,7 +40,7 @@ export class BlandGheavenController {
     );
   }
 
-  @Post('add-bland-gheaven')
+  @Post('add')
   @Roles(Role.ADMIN)
   async addBlandGheaven(@Body() addBlandGheavenDTO: AddBlandGheavenDTO) {
     return await this.blandGheavenService.handleAddBlandGheaven(
@@ -48,7 +48,7 @@ export class BlandGheavenController {
     );
   }
 
-  @Put('update-bland-gheaven/:id')
+  @Put('update/:id')
   @Roles(Role.ADMIN)
   async updateBlandGheaven(
     @Param() idDTO: IdDTO,
@@ -60,7 +60,7 @@ export class BlandGheavenController {
     );
   }
 
-  @Delete('delete-bland-gheaven/:id')
+  @Delete('delete/:id')
   @Roles(Role.ADMIN)
   async deleteBlandGheaven(@Param() idDTO: IdDTO) {
     return await this.blandGheavenService.handleDeleteBlandGheaven(idDTO);

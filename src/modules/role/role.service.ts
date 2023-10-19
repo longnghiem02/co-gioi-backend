@@ -102,10 +102,7 @@ export class RoleService {
         if (check) {
           return HttpResponse(HttpStatus.BAD_REQUEST, ErrorMessage.ROLE_EXISTS);
         } else {
-          await this.roleRepository.update(param.id, {
-            ...data,
-            updatedAt: new Date(),
-          });
+          await this.roleRepository.update(param.id, data);
           return HttpResponse(
             HttpStatus.CREATED,
             CommonMessage.UPDATE_ROLE_SUCCEED,

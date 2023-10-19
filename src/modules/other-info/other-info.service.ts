@@ -141,10 +141,7 @@ export class OtherInfoService {
             ErrorMessage.OTHER_INFO_EXISTS,
           );
         } else {
-          await this.otherInfoRepository.update(param.id, {
-            ...data,
-            updatedAt: new Date(),
-          });
+          await this.otherInfoRepository.update(param.id, data);
           return HttpResponse(
             HttpStatus.CREATED,
             CommonMessage.UPDATE_OTHER_INFO_SUCCEED,
