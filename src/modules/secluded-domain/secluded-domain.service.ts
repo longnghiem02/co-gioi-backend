@@ -1,6 +1,6 @@
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Not, Repository } from 'typeorm';
+import { ILike, Not, Repository } from 'typeorm';
 import { HttpResponse } from 'src/configs/HttpResponse.config';
 import { MetaDTO } from 'src/common/dto/meta.dto';
 import { PageDTO } from 'src/common/dto/page.dto';
@@ -74,6 +74,37 @@ export class SecludedDomainService {
           HttpStatus.NOT_FOUND,
           ErrorMessage.SECLUDED_DOMAIN_NOT_FOUND,
         );
+      }
+    } catch (error) {
+      return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+    }
+  }
+
+  async handleSearchSecludedDomain(
+    search: any,
+    paginate: any,
+  ): Promise<HttpResponse> {
+    try {
+      const [data, count] = await this.secludedDomainRepository.findAndCount({
+        where: { name: ILike(`%${search.name}%`) },
+        order: { name: 'ASC' },
+        take: paginate.take,
+        skip: (paginate.page - 1) * paginate.take,
+        select: {
+          id: true,
+          name: true,
+        },
+      });
+
+      const result = new PageDTO(
+        data,
+        new MetaDTO(count, paginate.take, paginate.page),
+      );
+
+      if (result) {
+        return HttpResponse(HttpStatus.OK, '', result);
+      } else {
+        return HttpResponse(HttpStatus.NOT_FOUND, ErrorMessage.GU_NOT_FOUND);
       }
     } catch (error) {
       return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);

@@ -13,7 +13,7 @@ import { SecludedDomainService } from './secluded-domain.service';
 import { Public } from 'src/common/decorators/public.decorator';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'src/common/enums/enums';
-import { FilterDTO, IdDTO, PaginateDTO } from 'src/common/dto/';
+import { FilterDTO, IdDTO, PaginateDTO, SearchDTO } from 'src/common/dto/';
 import { AddSecludedDomainDTO, UpdateSecludedDomainDTO } from './dto';
 
 @ApiTags('Secluded domain')
@@ -36,6 +36,18 @@ export class SecludedDomainController {
   ) {
     return await this.secludedDomainService.handleGetAllSecludedDomain(
       filterDTO,
+      paginateDTO,
+    );
+  }
+
+  @Get('search')
+  @Public()
+  async searchSecludedDomain(
+    @Query() searchDTO: SearchDTO,
+    @Query() paginateDTO: PaginateDTO,
+  ) {
+    return await this.secludedDomainService.handleSearchSecludedDomain(
+      searchDTO,
       paginateDTO,
     );
   }

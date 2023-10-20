@@ -1,6 +1,6 @@
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Not, Repository } from 'typeorm';
+import { ILike, Not, Repository } from 'typeorm';
 import { BlandGheaven } from './model/bland-gheaven.model';
 import { HttpResponse } from 'src/configs/HttpResponse.config';
 import { MetaDTO } from 'src/common/dto/meta.dto';
@@ -81,6 +81,37 @@ export class BlandGheavenService {
           HttpStatus.NOT_FOUND,
           ErrorMessage.BLAND_GHEAVEN_NOT_FOUND,
         );
+      }
+    } catch (error) {
+      return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+    }
+  }
+
+  async handleSearchBlandGheaven(
+    search: any,
+    paginate: any,
+  ): Promise<HttpResponse> {
+    try {
+      const [data, count] = await this.blandGheavenRepository.findAndCount({
+        where: { name: ILike(`%${search.name}%`) },
+        order: { name: 'ASC' },
+        take: paginate.take,
+        skip: (paginate.page - 1) * paginate.take,
+        select: {
+          id: true,
+          name: true,
+        },
+      });
+
+      const result = new PageDTO(
+        data,
+        new MetaDTO(count, paginate.take, paginate.page),
+      );
+
+      if (result) {
+        return HttpResponse(HttpStatus.OK, '', result);
+      } else {
+        return HttpResponse(HttpStatus.NOT_FOUND, ErrorMessage.GU_NOT_FOUND);
       }
     } catch (error) {
       return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);

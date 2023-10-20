@@ -13,7 +13,7 @@ import { BlandGheavenService } from './bland-gheaven.service';
 import { Public } from 'src/common/decorators/public.decorator';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'src/common/enums/enums';
-import { IdDTO, FilterDTO, PaginateDTO } from 'src/common/dto';
+import { IdDTO, FilterDTO, PaginateDTO, SearchDTO } from 'src/common/dto';
 import { AddBlandGheavenDTO, UpdateBlandGheavenDTO } from './dto';
 
 @ApiTags('Blessed land - Grotto heaven')
@@ -36,6 +36,18 @@ export class BlandGheavenController {
   ) {
     return await this.blandGheavenService.handleGetAllBlandGheaven(
       filterDTO,
+      paginateDTO,
+    );
+  }
+
+  @Get('search')
+  @Public()
+  async searchBlandGheaven(
+    @Query() searchDTO: SearchDTO,
+    @Query() paginateDTO: PaginateDTO,
+  ) {
+    return await this.blandGheavenService.handleSearchBlandGheaven(
+      searchDTO,
       paginateDTO,
     );
   }
