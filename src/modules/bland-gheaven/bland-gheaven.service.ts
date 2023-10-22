@@ -38,7 +38,7 @@ export class BlandGheavenService {
         },
       });
       if (result) {
-        return HttpResponse(HttpStatus.OK, '', result);
+        return HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
         return HttpResponse(
           HttpStatus.NOT_FOUND,
@@ -75,7 +75,7 @@ export class BlandGheavenService {
       );
 
       if (result) {
-        return HttpResponse(HttpStatus.OK, '', result);
+        return HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
         return HttpResponse(
           HttpStatus.NOT_FOUND,
@@ -109,7 +109,7 @@ export class BlandGheavenService {
       );
 
       if (result) {
-        return HttpResponse(HttpStatus.OK, '', result);
+        return HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
         return HttpResponse(HttpStatus.NOT_FOUND, ErrorMessage.GU_NOT_FOUND);
       }

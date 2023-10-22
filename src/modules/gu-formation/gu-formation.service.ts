@@ -42,7 +42,7 @@ export class GuFormationService {
         },
       });
       if (result) {
-        return HttpResponse(HttpStatus.OK, '', result);
+        return HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
         return HttpResponse(
           HttpStatus.NOT_FOUND,
@@ -80,7 +80,7 @@ export class GuFormationService {
       );
 
       if (result) {
-        return HttpResponse(HttpStatus.OK, '', result);
+        return HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
         return HttpResponse(
           HttpStatus.NOT_FOUND,
@@ -114,7 +114,7 @@ export class GuFormationService {
       );
 
       if (result) {
-        return HttpResponse(HttpStatus.OK, '', result);
+        return HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
         return HttpResponse(
           HttpStatus.NOT_FOUND,

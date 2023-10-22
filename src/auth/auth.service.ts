@@ -38,10 +38,7 @@ export class AuthService {
           email: data.email,
           password: hashPassword,
         });
-        return HttpResponse(
-          HttpStatus.CREATED,
-          CommonMessage.CREATE_ACCOUNT_SUCCEED,
-        );
+        return HttpResponse(HttpStatus.CREATED, CommonMessage.SIGN_UP_SUCCEED);
       }
     } catch (error) {
       return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
@@ -86,7 +83,7 @@ export class AuthService {
           role: account.role.name,
         };
         const access_token = await this.jwtService.signAsync(payload);
-        return HttpResponse(HttpStatus.OK, '', access_token);
+        return HttpResponse(HttpStatus.OK, CommonMessage.OK, access_token);
       }
     } catch (error) {
       return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);

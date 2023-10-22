@@ -42,7 +42,7 @@ export class BeastService {
         },
       });
       if (result) {
-        return HttpResponse(HttpStatus.OK, '', result);
+        return HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
         return HttpResponse(HttpStatus.NOT_FOUND, ErrorMessage.BEAST_NOT_FOUND);
       }
@@ -74,7 +74,7 @@ export class BeastService {
       );
 
       if (result) {
-        return HttpResponse(HttpStatus.OK, '', result);
+        return HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
         return HttpResponse(HttpStatus.NOT_FOUND, ErrorMessage.BEAST_NOT_FOUND);
       }
@@ -102,7 +102,7 @@ export class BeastService {
       );
 
       if (result) {
-        return HttpResponse(HttpStatus.OK, '', result);
+        return HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
         return HttpResponse(HttpStatus.NOT_FOUND, ErrorMessage.BEAST_NOT_FOUND);
       }

@@ -13,7 +13,7 @@ export class Character extends AbstractEntity {
 
   @Column({
     name: 'title',
-    nullable: false,
+    nullable: true,
   })
   title: string;
 
@@ -57,6 +57,17 @@ export class Character extends AbstractEntity {
     name: 'sub_path_id',
   })
   subPath: Path;
+
+  @Column({
+    name: 'region_id',
+    nullable: false,
+  })
+  regionId: number;
+  @ManyToOne(() => OtherInfo, (region) => region.characters)
+  @JoinColumn({
+    name: 'region_id',
+  })
+  region: OtherInfo;
 
   @Column({
     name: 'race_id',

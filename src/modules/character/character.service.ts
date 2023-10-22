@@ -1,7 +1,7 @@
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LessThan, Not, Repository } from 'typeorm';
-import { OtherInfo } from './model/orther-info.model';
+import { ILike, Not, Repository } from 'typeorm';
+import { Character } from './model/character.model';
 import { HttpResponse } from 'src/configs/HttpResponse.config';
 import { MetaDTO } from 'src/common/dto/meta.dto';
 import { PageDTO } from 'src/common/dto/page.dto';
@@ -11,20 +11,48 @@ import {
 } from 'src/common/constants/message.constants';
 
 @Injectable()
-export class OtherInfoService {
+export class CharacterService {
   constructor(
-    @InjectRepository(OtherInfo)
-    private otherInfoRepository: Repository<OtherInfo>,
+    @InjectRepository(Character)
+    private characterRepository: Repository<Character>,
   ) {}
 
-  async handleGetOtherInfo(query: any): Promise<HttpResponse> {
+  async handleGetCharacter(query: any): Promise<HttpResponse> {
     try {
-      const result = await this.otherInfoRepository.findOne({
-        where: { id: query.id >= 0 ? query.id : 0 },
+      const result = await this.characterRepository.findOne({
+        where: { id: query.id },
+        relations: {
+          mainPath: true,
+          subPath: true,
+          region: true,
+          race: true,
+          physique: true,
+        },
         select: {
           id: true,
           name: true,
+          description: true,
           detail: true,
+          mainPath: {
+            id: true,
+            name: true,
+          },
+          subPath: {
+            id: true,
+            name: true,
+          },
+          region: {
+            id: true,
+            name: true,
+          },
+          race: {
+            id: true,
+            name: true,
+          },
+          physique: {
+            id: true,
+            name: true,
+          },
         },
       });
       if (result) {
@@ -32,7 +60,7 @@ export class OtherInfoService {
       } else {
         return HttpResponse(
           HttpStatus.NOT_FOUND,
-          ErrorMessage.OTHER_INFO_NOT_FOUND,
+          ErrorMessage.CHARACTER_NOT_FOUND,
         );
       }
     } catch (error) {
@@ -40,13 +68,19 @@ export class OtherInfoService {
     }
   }
 
-  async handleGetAllOtherInfo(
+  async handleGetAllCharacter(
     filter: any,
     paginate: any,
   ): Promise<HttpResponse> {
     try {
-      const [data, count] = await this.otherInfoRepository.findAndCount({
-        where: { id: Not(LessThan(0)), type: filter.type ? filter.type : null },
+      const [data, count] = await this.characterRepository.findAndCount({
+        where: {
+          mainPathId: filter.mainPathId ? filter.mainPathId : null,
+          subPathId: filter.subPathId ? filter.subPathId : null,
+          regionId: filter.regionId ? filter.regionId : null,
+          raceId: filter.raceId ? filter.raceId : null,
+          physiqueId: filter.physiqueId ? filter.physiqueId : null,
+        },
         order: { name: 'ASC' },
         take: paginate.take,
         skip: (paginate.page - 1) * paginate.take,
@@ -66,7 +100,7 @@ export class OtherInfoService {
       } else {
         return HttpResponse(
           HttpStatus.NOT_FOUND,
-          ErrorMessage.OTHER_INFO_NOT_FOUND,
+          ErrorMessage.CHARACTER_NOT_FOUND,
         );
       }
     } catch (error) {
@@ -74,26 +108,33 @@ export class OtherInfoService {
     }
   }
 
-  async handleGetAllOtherInfoName(filter: any): Promise<HttpResponse> {
+  async handleSearchCharacter(
+    search: any,
+    paginate: any,
+  ): Promise<HttpResponse> {
     try {
-      const result = await this.otherInfoRepository.find({
-        where: [
-          { type: filter?.type ? filter.type : null },
-          { type: 'none' },
-          { type: 'unknown' },
-        ],
-        order: { id: 'ASC' },
+      const [data, count] = await this.characterRepository.findAndCount({
+        where: { name: ILike(`%${search.name}%`) },
+        order: { name: 'ASC' },
+        take: paginate.take,
+        skip: (paginate.page - 1) * paginate.take,
         select: {
           id: true,
           name: true,
         },
       });
+
+      const result = new PageDTO(
+        data,
+        new MetaDTO(count, paginate.take, paginate.page),
+      );
+
       if (result) {
         return HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
         return HttpResponse(
           HttpStatus.NOT_FOUND,
-          ErrorMessage.OTHER_INFO_NOT_FOUND,
+          ErrorMessage.CHARACTER_NOT_FOUND,
         );
       }
     } catch (error) {
@@ -101,21 +142,21 @@ export class OtherInfoService {
     }
   }
 
-  async handleAddOtherInfo(data: any): Promise<HttpResponse> {
+  async handleAddCharacter(data: any): Promise<HttpResponse> {
     try {
-      const check = await this.otherInfoRepository.findOneBy({
+      const check = await this.characterRepository.findOneBy({
         name: data.name,
       });
       if (check) {
         return HttpResponse(
           HttpStatus.BAD_REQUEST,
-          ErrorMessage.OTHER_INFO_EXISTS,
+          ErrorMessage.CHARACTER_EXISTS,
         );
       } else {
-        await this.otherInfoRepository.save(data);
+        await this.characterRepository.save(data);
         return HttpResponse(
           HttpStatus.CREATED,
-          CommonMessage.ADD_OTHER_INFO_SUCCEED,
+          CommonMessage.ADD_CHARACTER_SUCCEED,
         );
       }
     } catch (error) {
@@ -123,28 +164,28 @@ export class OtherInfoService {
     }
   }
 
-  async handleUpdateOtherInfo(param: any, data: any): Promise<HttpResponse> {
+  async handleUpdateCharacter(param: any, data: any): Promise<HttpResponse> {
     try {
-      const result = await this.otherInfoRepository.findOneBy({ id: param.id });
+      const result = await this.characterRepository.findOneBy({ id: param.id });
       if (!result) {
         return HttpResponse(
           HttpStatus.BAD_REQUEST,
-          ErrorMessage.OTHER_INFO_NOT_FOUND,
+          ErrorMessage.CHARACTER_NOT_FOUND,
         );
       } else {
-        const check = await this.otherInfoRepository.findOne({
+        const check = await this.characterRepository.findOne({
           where: { id: Not(param.id), name: data.name },
         });
         if (check) {
           return HttpResponse(
             HttpStatus.BAD_REQUEST,
-            ErrorMessage.OTHER_INFO_EXISTS,
+            ErrorMessage.CHARACTER_EXISTS,
           );
         } else {
-          await this.otherInfoRepository.update(param.id, data);
+          await this.characterRepository.update(param.id, data);
           return HttpResponse(
             HttpStatus.CREATED,
-            CommonMessage.UPDATE_OTHER_INFO_SUCCEED,
+            CommonMessage.UPDATE_CHARACTER_SUCCEED,
           );
         }
       }
@@ -153,21 +194,21 @@ export class OtherInfoService {
     }
   }
 
-  async handleDeleteOtherInfo(param: any): Promise<HttpResponse> {
+  async handleDeleteCharacter(param: any): Promise<HttpResponse> {
     try {
-      const result = await this.otherInfoRepository.findOne({
+      const result = await this.characterRepository.findOne({
         where: { id: param.id },
       });
       if (result) {
-        await this.otherInfoRepository.delete(param.id);
+        await this.characterRepository.delete(param.id);
         return HttpResponse(
           HttpStatus.ACCEPTED,
-          CommonMessage.DELETE_OTHER_INFO_SUCCEED,
+          CommonMessage.DELETE_CHARACTER_SUCCEED,
         );
       } else {
         return HttpResponse(
           HttpStatus.NOT_FOUND,
-          ErrorMessage.OTHER_INFO_NOT_FOUND,
+          ErrorMessage.CHARACTER_NOT_FOUND,
         );
       }
     } catch (error) {

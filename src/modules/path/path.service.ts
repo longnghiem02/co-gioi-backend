@@ -28,7 +28,7 @@ export class PathService {
         },
       });
       if (result) {
-        return HttpResponse(HttpStatus.OK, '', result);
+        return HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
         return HttpResponse(HttpStatus.NOT_FOUND, ErrorMessage.PATH_NOT_FOUND);
       }
@@ -56,7 +56,7 @@ export class PathService {
       );
 
       if (result) {
-        return HttpResponse(HttpStatus.OK, '', result);
+        return HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
         return HttpResponse(HttpStatus.NOT_FOUND, ErrorMessage.PATH_NOT_FOUND);
       }
@@ -75,7 +75,7 @@ export class PathService {
         },
       });
       if (result) {
-        return HttpResponse(HttpStatus.OK, '', result);
+        return HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
         return HttpResponse(HttpStatus.NOT_FOUND, ErrorMessage.PATH_NOT_FOUND);
       }
@@ -103,7 +103,7 @@ export class PathService {
       );
 
       if (result) {
-        return HttpResponse(HttpStatus.OK, '', result);
+        return HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
         return HttpResponse(HttpStatus.NOT_FOUND, ErrorMessage.PATH_NOT_FOUND);
       }

@@ -12,6 +12,7 @@ import { GuHouseModule } from './modules/gu-house/gu-house.module';
 import { BeastModule } from './modules/beast/beast.module';
 import { BlandGheavenModule } from './modules/bland-gheaven/bland-gheaven.module';
 import { SecludedDomainModule } from './modules/secluded-domain/secluded-domain.module';
+import { KillerMoveModule } from './modules/killer-move/killer-move.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { SecludedDomainModule } from './modules/secluded-domain/secluded-domain.
     GuModule,
     GuFormationModule,
     GuHouseModule,
+    KillerMoveModule,
     BeastModule,
     BlandGheavenModule,
     SecludedDomainModule,

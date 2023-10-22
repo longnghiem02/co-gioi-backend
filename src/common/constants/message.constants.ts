@@ -1,7 +1,7 @@
 export const CommonMessage = {
   OK: 'Ok',
-  LOGIN_SUCCEED: 'Login succeed!',
-  CREATE_ACCOUNT_SUCCEED: 'Account successfully created!',
+  SIGN_IN_SUCCEED: 'Sign in succeed!',
+  SIGN_UP_SUCCEED: 'Sign up succeed!',
   UPDATE_ACCOUNT_SUCCEED: 'Account successfully updated!',
   DELETE_ACCOUNT_SUCCEED: 'Account successfully deleted!',
 
@@ -28,6 +28,10 @@ export const CommonMessage = {
   ADD_GU_HOUSE_SUCCEED: 'Gu house successfully added!',
   UPDATE_GU_HOUSE_SUCCEED: 'Gu house successfully updated!',
   DELETE_GU_HOUSE_SUCCEED: 'Gu house successfully deleted!',
+
+  ADD_CHARACTER_SUCCEED: 'Character successfully added!',
+  UPDATE_CHARACTER_SUCCEED: 'Character successfully updated!',
+  DELETE_CHARACTER_SUCCEED: 'Character successfully deleted!',
 
   ADD_BEAST_SUCCEED: 'Beast successfully added!',
   UPDATE_BEAST_SUCCEED: 'Beast successfully updated!',
@@ -67,6 +71,9 @@ export const ErrorMessage = {
   GU_HOUSE_EXISTS: 'Gu house is already exists!',
   GU_HOUSE_NOT_FOUND: 'Gu house not found!',
 
+  CHARACTER_EXISTS: 'Character is already exists!',
+  CHARACTER_NOT_FOUND: 'Character not found!',
+
   BEAST_EXISTS: 'Beast is already exists!',
   BEAST_NOT_FOUND: 'Beast not found!',
 
@@ -78,6 +85,6 @@ export const ErrorMessage = {
 };
 
 export const WarningMessage = {
-  LOGIN: 'You must login to do this action!',
+  SIGN_IN: 'You must login to do this action!',
   PERMISSION: 'You do not have permission to do this action!',
 };

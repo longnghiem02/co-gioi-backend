@@ -1,16 +1,17 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConfig } from 'src/configs/app.config';
 import { AuthGuard } from './guard/auth.guard';
-import { AccountModule } from 'src/modules/account/account.module';
+import { Account } from 'src/modules/account/model/account.model';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { PasswordService } from './service/password.service';
 
 @Module({
   imports: [
-    AccountModule,
+    TypeOrmModule.forFeature([Account]),
     JwtModule.register({
       global: true,
       secret: jwtConfig.secret,

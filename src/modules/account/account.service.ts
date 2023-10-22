@@ -36,7 +36,7 @@ export class AccountService {
       );
 
       if (result) {
-        return HttpResponse(HttpStatus.OK, '', result);
+        return HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
         return HttpResponse(
           HttpStatus.NOT_FOUND,
@@ -58,7 +58,7 @@ export class AccountService {
         },
       });
       if (result) {
-        return HttpResponse(HttpStatus.OK, '', result);
+        return HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
         return HttpResponse(
           HttpStatus.NOT_FOUND,
@@ -80,7 +80,7 @@ export class AccountService {
         },
       });
       if (result) {
-        return HttpResponse(HttpStatus.OK, '', result);
+        return HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
         return HttpResponse(
           HttpStatus.NOT_FOUND,

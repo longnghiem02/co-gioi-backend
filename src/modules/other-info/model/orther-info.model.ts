@@ -73,7 +73,7 @@ export class OtherInfo extends AbstractEntity {
   @OneToMany(
     () => Character,
     (character) => {
-      character.race, character.physique;
+      character.region, character.race, character.physique;
     },
   )
   characters: Character[];
