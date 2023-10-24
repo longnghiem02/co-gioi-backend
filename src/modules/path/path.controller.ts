@@ -37,7 +37,7 @@ export class PathController {
   }
 
   @Get('get-all-name')
-  @Roles(Role.ADMIN)
+  @Public()
   async getAllPathName() {
     return await this.pathService.handleGetAllPathName();
   }

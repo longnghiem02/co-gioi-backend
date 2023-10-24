@@ -87,7 +87,10 @@ export class PathService {
   async handleSearchPath(search: any, paginate: any): Promise<HttpResponse> {
     try {
       const [data, count] = await this.pathRepository.findAndCount({
-        where: { id: MoreThan(0), name: ILike(`%${search.name}%`) },
+        where: {
+          id: MoreThan(0),
+          name: ILike(`%${search.name ? search.name : null}%`),
+        },
         order: { name: 'ASC' },
         take: paginate.take,
         skip: (paginate.page - 1) * paginate.take,

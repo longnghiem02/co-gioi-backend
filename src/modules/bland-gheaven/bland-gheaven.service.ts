@@ -93,7 +93,7 @@ export class BlandGheavenService {
   ): Promise<HttpResponse> {
     try {
       const [data, count] = await this.blandGheavenRepository.findAndCount({
-        where: { name: ILike(`%${search.name}%`) },
+        where: { name: ILike(`%${search.name ? search.name : null}%`) },
         order: { name: 'ASC' },
         take: paginate.take,
         skip: (paginate.page - 1) * paginate.take,

@@ -14,8 +14,7 @@ import { Public } from 'src/common/decorators/public.decorator';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'src/common/enums/enums';
 import { IdDTO, SearchDTO, PaginateDTO } from 'src/common/dto';
-import { AddCharacterDTO, UpdateCharacterDTO } from './dto';
-import { FilterCharacterDTO } from './dto/filter-character.dto';
+import { AddCharacterDTO, UpdateCharacterDTO, FilterCharacterDTO } from './dto';
 
 @ApiTags('Character')
 @ApiBearerAuth()

@@ -86,7 +86,7 @@ export class SecludedDomainService {
   ): Promise<HttpResponse> {
     try {
       const [data, count] = await this.secludedDomainRepository.findAndCount({
-        where: { name: ILike(`%${search.name}%`) },
+        where: { name: ILike(`%${search.name ? search.name : null}%`) },
         order: { name: 'ASC' },
         take: paginate.take,
         skip: (paginate.page - 1) * paginate.take,
