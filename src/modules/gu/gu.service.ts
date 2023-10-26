@@ -21,21 +21,13 @@ export class GuService {
     try {
       const result = await this.guRepository.findOne({
         where: { id: query.id },
-        relations: { path: true, type: true, rank: true },
+        relations: { path: true },
         select: {
           id: true,
           name: true,
           description: true,
           detail: true,
           path: {
-            id: true,
-            name: true,
-          },
-          type: {
-            id: true,
-            name: true,
-          },
-          rank: {
             id: true,
             name: true,
           },
@@ -55,9 +47,7 @@ export class GuService {
     try {
       const [data, count] = await this.guRepository.findAndCount({
         where: {
-          pathId: filter.pathId ? filter.pathId : null,
-          typeId: filter.typeId ? filter.typeId : null,
-          rankId: filter.rankId ? filter.rankId : null,
+          path: filter.path ? filter.path : null,
         },
         order: { name: 'ASC' },
         take: paginate.take,

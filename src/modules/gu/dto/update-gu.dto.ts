@@ -10,30 +10,6 @@ export class UpdateGuDTO {
   })
   name: string;
 
-  @IsNotEmpty()
-  @IsNumber()
-  @ApiProperty({
-    description: 'pathId',
-    example: 0,
-  })
-  pathId: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  @ApiProperty({
-    description: 'typeId',
-    example: 0,
-  })
-  typeId: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  @ApiProperty({
-    description: 'rankId',
-    example: 0,
-  })
-  rankId: number;
-
   @IsOptional()
   @IsString()
   @ApiProperty({
@@ -57,4 +33,12 @@ export class UpdateGuDTO {
     example: '',
   })
   image: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @ApiProperty({
+    description: 'pathId',
+    example: 0,
+  })
+  pathId: number;
 }

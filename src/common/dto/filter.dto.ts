@@ -9,7 +9,7 @@ export class FilterDTO {
     example: 0,
   })
   @Type(() => Number)
-  pathId: number;
+  path: number;
 
   @IsOptional()
   @ApiProperty({

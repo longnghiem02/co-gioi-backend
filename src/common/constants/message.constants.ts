@@ -13,6 +13,10 @@ export const CommonMessage = {
   UPDATE_PATH_SUCCEED: 'Path successfully updated!',
   DELETE_PATH_SUCCEED: 'Path successfully deleted!',
 
+  ADD_RACE_SUCCEED: 'Race successfully added!',
+  UPDATE_RACE_SUCCEED: 'Race successfully updated!',
+  DELETE_RACE_SUCCEED: 'Race successfully deleted!',
+
   ADD_OTHER_INFO_SUCCEED: 'Info successfully added!',
   UPDATE_OTHER_INFO_SUCCEED: 'Info successfully updated!',
   DELETE_OTHER_INFO_SUCCEED: 'Info successfully deleted!',
@@ -58,6 +62,9 @@ export const ErrorMessage = {
 
   PATH_EXISTS: 'Path is already exists!',
   PATH_NOT_FOUND: 'Path not found!',
+
+  RACE_EXISTS: 'Race is already exists!',
+  RACE_NOT_FOUND: 'Race not found!',
 
   OTHER_INFO_EXISTS: 'This info is already exists!',
   OTHER_INFO_NOT_FOUND: 'This info not found!',
