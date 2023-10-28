@@ -1,12 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
+import { PaginateDTO } from 'src/common/dto';
 
-export class SearchDTO {
+export class FilterPathDTO extends PaginateDTO {
   @IsOptional()
   @IsString()
   @ApiProperty({
-    description: 'name',
+    description: 'Search name',
     example: 'Example',
   })
-  name: string;
+  search?: string;
 }

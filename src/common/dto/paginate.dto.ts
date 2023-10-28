@@ -1,21 +1,20 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsNumberString, IsOptional } from 'class-validator';
 
 export class PaginateDTO {
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'take',
-    example: 6,
-  })
-  @Type(() => Number)
-  take: number;
-
-  @IsNotEmpty()
+  @IsOptional()
+  @IsNumberString()
   @ApiProperty({
     description: 'page',
-    example: 1,
+    example: '1',
   })
-  @Type(() => Number)
-  page: number;
+  page?: number;
+
+  @IsOptional()
+  @IsNumberString()
+  @ApiProperty({
+    description: 'limit',
+    example: '6',
+  })
+  limit?: number;
 }

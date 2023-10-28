@@ -2,16 +2,16 @@ import { IsBoolean, IsNumber } from 'class-validator';
 
 export class MetaDTO {
   @IsNumber()
-  totalItem: number;
+  totalItems: number;
 
   @IsNumber()
-  itemPerPage: number;
+  itemsPerPage: number;
 
   @IsNumber()
   currentPage: number;
 
   @IsNumber()
-  totalPage: number;
+  totalPages: number;
 
   @IsBoolean()
   hasPreviousPage: boolean;
@@ -19,12 +19,12 @@ export class MetaDTO {
   @IsBoolean()
   hasNextPage: boolean;
 
-  constructor(totalItem: number, itemPerPage: number, currentPage: number) {
-    this.totalItem = totalItem;
-    this.itemPerPage = itemPerPage;
+  constructor(totalItems: number, currentPage: number, itemsPerPage: number) {
+    this.totalItems = totalItems;
+    this.itemsPerPage = itemsPerPage;
     this.currentPage = currentPage;
-    this.totalPage = Math.ceil(this.totalItem / this.itemPerPage);
+    this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
     this.hasPreviousPage = this.currentPage > 1;
-    this.hasNextPage = this.currentPage < this.totalPage;
+    this.hasNextPage = this.currentPage < this.totalPages;
   }
 }

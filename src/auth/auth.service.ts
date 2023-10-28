@@ -3,7 +3,8 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Account } from 'src/modules/account/model/account.model';
-import { HttpResponse } from 'src/configs/HttpResponse.config';
+import { HttpResponse } from 'src/common/dto/http-response.dto';
+import { ErrorResponse } from 'src/common/dto/error-response.dto';
 import { PasswordService } from 'src/auth/service/password.service';
 import {
   CommonMessage,
@@ -19,13 +20,13 @@ export class AuthService {
     private passwordService: PasswordService,
   ) {}
 
-  async handleSignUp(data: any): Promise<HttpResponse> {
+  async handleSignUp(data: any): Promise<HttpResponse | ErrorResponse> {
     try {
       const checkEmail = await this.accountRepository.findOneBy({
         email: data.email,
       });
       if (checkEmail) {
-        return HttpResponse(
+        return new ErrorResponse(
           HttpStatus.BAD_REQUEST,
           ErrorMessage.EMAIL_HAS_BEEN_USED,
         );
@@ -38,14 +39,17 @@ export class AuthService {
           email: data.email,
           password: hashPassword,
         });
-        return HttpResponse(HttpStatus.CREATED, CommonMessage.SIGN_UP_SUCCEED);
+        return new HttpResponse(
+          HttpStatus.CREATED,
+          CommonMessage.SIGN_UP_SUCCEED,
+        );
       }
     } catch (error) {
-      return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+      return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
     }
   }
 
-  async handleSignIn(data: any): Promise<HttpResponse> {
+  async handleSignIn(data: any): Promise<HttpResponse | ErrorResponse> {
     try {
       const account = await this.accountRepository.findOne({
         where: { email: data.email },
@@ -61,7 +65,7 @@ export class AuthService {
         },
       });
       if (!account) {
-        return HttpResponse(
+        return new ErrorResponse(
           HttpStatus.NOT_FOUND,
           ErrorMessage.ACCOUNT_NOT_FOUND,
         );
@@ -71,7 +75,7 @@ export class AuthService {
         account.password,
       );
       if (!checkPassword) {
-        return HttpResponse(
+        return new ErrorResponse(
           HttpStatus.UNAUTHORIZED,
           ErrorMessage.WRONG_PASSWORD,
         );
@@ -83,14 +87,17 @@ export class AuthService {
           role: account.role.name,
         };
         const access_token = await this.jwtService.signAsync(payload);
-        return HttpResponse(HttpStatus.OK, CommonMessage.OK, access_token);
+        return new HttpResponse(HttpStatus.OK, CommonMessage.OK, access_token);
       }
     } catch (error) {
-      return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+      return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
     }
   }
 
-  async handleChangePassword(account: any, data: any): Promise<HttpResponse> {
+  async handleChangePassword(
+    account: any,
+    data: any,
+  ): Promise<HttpResponse | ErrorResponse> {
     try {
       const result = await this.accountRepository.findOneBy({
         id: account.id,
@@ -107,24 +114,24 @@ export class AuthService {
           await this.accountRepository.update(account.id, {
             password: hashPassword,
           });
-          return HttpResponse(
+          return new HttpResponse(
             HttpStatus.CREATED,
             CommonMessage.UPDATE_ACCOUNT_SUCCEED,
           );
         } else {
-          return HttpResponse(
+          return new ErrorResponse(
             HttpStatus.UNAUTHORIZED,
             ErrorMessage.WRONG_PASSWORD,
           );
         }
       } else {
-        return HttpResponse(
+        return new ErrorResponse(
           HttpStatus.NOT_FOUND,
           ErrorMessage.ACCOUNT_NOT_FOUND,
         );
       }
     } catch (error) {
-      return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+      return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
     }
   }
 }

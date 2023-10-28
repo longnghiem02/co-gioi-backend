@@ -13,8 +13,8 @@ import { GuService } from './gu.service';
 import { Public } from 'src/common/decorators/public.decorator';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'src/common/enums/enums';
-import { IdDTO, SearchDTO, PaginateDTO, FilterDTO } from 'src/common/dto';
-import { AddGuDTO, UpdateGuDTO } from './dto';
+import { IdDTO } from 'src/common/dto';
+import { AddGuDTO, UpdateGuDTO, FilterGuDTO } from './dto';
 
 @ApiTags('Gu')
 @ApiBearerAuth()
@@ -22,45 +22,33 @@ import { AddGuDTO, UpdateGuDTO } from './dto';
 export class GuController {
   constructor(private guService: GuService) {}
 
-  @Get('get')
+  @Get(':id')
   @Public()
-  async getGu(@Query() idDTO: IdDTO) {
-    return await this.guService.handleGetGu(idDTO);
+  async getGu(@Param() idDTO: IdDTO) {
+    return await this.guService.getGu(idDTO);
   }
 
-  @Get('get-all')
+  @Get('')
   @Public()
-  async getAllGu(
-    @Query() filterDTO: FilterDTO,
-    @Query() paginateDTO: PaginateDTO,
-  ) {
-    return await this.guService.handleGetAllGu(filterDTO, paginateDTO);
+  async getAllGu(@Query() filterGuDTO: FilterGuDTO) {
+    return await this.guService.getAllGu(filterGuDTO);
   }
 
-  @Get('search')
-  @Public()
-  async searchGu(
-    @Query() searchDTO: SearchDTO,
-    @Query() paginateDTO: PaginateDTO,
-  ) {
-    return await this.guService.handleSearchGu(searchDTO, paginateDTO);
-  }
-
-  @Post('add')
+  @Post('')
   @Roles(Role.ADMIN)
   async addGu(@Body() addGuDTO: AddGuDTO) {
-    return await this.guService.handleAddGu(addGuDTO);
+    return await this.guService.addGu(addGuDTO);
   }
 
-  @Put('update/:id')
+  @Put(':id')
   @Roles(Role.ADMIN)
   async updateGu(@Param() idDTO: IdDTO, @Body() updateGuDTO: UpdateGuDTO) {
-    return await this.guService.handleUpdateGu(idDTO, updateGuDTO);
+    return await this.guService.updateGu(idDTO, updateGuDTO);
   }
 
-  @Delete('delete/:id')
+  @Delete(':id')
   @Roles(Role.ADMIN)
   async deleteGu(@Param() idDTO: IdDTO) {
-    return await this.guService.handleDeleteGu(idDTO);
+    return await this.guService.deleteGu(idDTO);
   }
 }

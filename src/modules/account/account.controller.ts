@@ -22,37 +22,37 @@ import { UpdateAccountDTO } from './dto';
 export class AccountController {
   constructor(private accountService: AccountService) {}
 
-  @Get('get-all')
+  @Get('')
   @Roles(Role.ADMIN)
-  getAllAccount(@Query() paginateDTO: PaginateDTO) {
-    return this.accountService.handleGetAllAccount(paginateDTO);
+  async getAllAccount(@Query() paginateDTO: PaginateDTO) {
+    return await this.accountService.getAllAccount(paginateDTO);
   }
 
-  @Get('get-info')
+  @Get(':id')
   @Public()
-  getAccountInfo(@Query() idDTO: IdDTO) {
-    return this.accountService.handleGetAccountInfo(idDTO);
+  async getAccountInfo(@Param() idDTO: IdDTO) {
+    return await this.accountService.getAccountInfo(idDTO);
   }
 
-  @Get('get-my-info')
-  getMyAccountInfo(@Request() req: any) {
-    return this.accountService.handleGetMyAccountInfo(req.account.id);
+  @Get('me')
+  async getMyAccountInfo(@Request() req: any) {
+    return await this.accountService.getMyAccountInfo(req.account.id);
   }
 
-  @Put('update')
-  updateAccount(
+  @Put('')
+  async updateAccount(
     @Request() req: any,
     @Body() updateAccountDTO: UpdateAccountDTO,
   ) {
-    return this.accountService.handleUpdateAccount(
+    return await this.accountService.updateAccount(
       req.account,
       updateAccountDTO,
     );
   }
 
-  @Delete('delete/:id')
+  @Delete(':id')
   @Roles(Role.ADMIN)
-  deleteAccount(@Param() idDTO: IdDTO) {
-    return this.accountService.handleDeleteAccount(idDTO);
+  async deleteAccount(@Param() idDTO: IdDTO) {
+    return await this.accountService.deleteAccount(idDTO);
   }
 }
