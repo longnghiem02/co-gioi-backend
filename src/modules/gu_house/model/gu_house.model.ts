@@ -1,9 +1,9 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { AbstractEntity } from '../../../common/model/abstract-base.model';
-import { Path } from 'src/modules/path/model/path.model';
+import { GuHousePath } from 'src/modules/gu_house/model/gu_house-path.model';
 
-@Entity({ name: 'gus' })
-export class Gu extends AbstractEntity {
+@Entity({ name: 'gu_houses' })
+export class GuHouse extends AbstractEntity {
   @Column({
     name: 'name',
     nullable: false,
@@ -29,16 +29,6 @@ export class Gu extends AbstractEntity {
   })
   image: string;
 
-  @Column({
-    name: 'path_id',
-    nullable: false,
-  })
-  pathId: number;
-  @ManyToOne(() => Path, (path) => path.gus, {
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn({
-    name: 'path_id',
-  })
-  path: Path;
+  @OneToMany(() => GuHousePath, (guHousePath) => guHousePath.guHouse)
+  guHousePaths: GuHousePath[];
 }

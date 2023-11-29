@@ -21,10 +21,10 @@ export class AddGuDTO {
   @IsOptional()
   @IsString()
   @ApiProperty({
-    description: 'detail',
+    description: 'information',
     example: 'Example',
   })
-  detail: string;
+  information: string;
 
   @IsOptional()
   @IsString()

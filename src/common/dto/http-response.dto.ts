@@ -1,5 +1,5 @@
 export class HttpResponse {
-  statusCode: number;
+  statusCode?: number;
   message?: string;
   data?: any;
 

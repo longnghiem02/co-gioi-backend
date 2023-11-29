@@ -1,14 +1,17 @@
-import { Injectable, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  HttpStatus,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Not, Repository } from 'typeorm';
 import { Path } from './model/path.model';
-import { MetaDTO } from 'src/common/dto/meta.dto';
-import { PageDTO } from 'src/common/dto/page.dto';
+import { PageDTO, MetaDTO } from 'src/common/dto';
 import { HttpResponse } from 'src/common/dto/http-response.dto';
-import { ErrorResponse } from 'src/common/dto/error-response.dto';
 import {
   CommonMessage,
-  ErrorMessage,
+  PathMessage,
 } from 'src/common/constants/message.constants';
 
 @Injectable()
@@ -18,30 +21,27 @@ export class PathService {
     private pathRepository: Repository<Path>,
   ) {}
 
-  async getPath(param: any): Promise<HttpResponse | ErrorResponse> {
+  async getPath(param: any): Promise<HttpResponse> {
     try {
       const result = await this.pathRepository.findOne({
         where: { id: param.id },
         select: {
           id: true,
           name: true,
-          detail: true,
+          information: true,
         },
       });
       if (result) {
         return new HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
-        return new ErrorResponse(
-          HttpStatus.NOT_FOUND,
-          ErrorMessage.PATH_NOT_FOUND,
-        );
+        throw new NotFoundException(PathMessage.PATH_NOT_FOUND);
       }
     } catch (error) {
-      return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+      throw error;
     }
   }
 
-  async getAllPath(query: any): Promise<HttpResponse | ErrorResponse> {
+  async getAllPath(query: any): Promise<HttpResponse> {
     try {
       const [data, count] = await this.pathRepository.findAndCount({
         where: {
@@ -64,17 +64,14 @@ export class PathService {
       if (result) {
         return new HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
-        return new ErrorResponse(
-          HttpStatus.NOT_FOUND,
-          ErrorMessage.PATH_NOT_FOUND,
-        );
+        throw new NotFoundException(PathMessage.PATH_NOT_FOUND);
       }
     } catch (error) {
-      return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+      throw error;
     }
   }
 
-  async getAllPathName(): Promise<HttpResponse | ErrorResponse> {
+  async getAllPathName(): Promise<HttpResponse> {
     try {
       const result = await this.pathRepository.find({
         order: { name: 'ASC' },
@@ -86,70 +83,55 @@ export class PathService {
       if (result) {
         return new HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
-        return new ErrorResponse(
-          HttpStatus.NOT_FOUND,
-          ErrorMessage.PATH_NOT_FOUND,
-        );
+        throw new NotFoundException(PathMessage.PATH_NOT_FOUND);
       }
     } catch (error) {
-      return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+      throw error;
     }
   }
 
-  async addPath(data: any): Promise<HttpResponse | ErrorResponse> {
+  async addPath(data: any): Promise<HttpResponse> {
     try {
       const check = await this.pathRepository.findOneBy({ name: data.name });
       if (check) {
-        return new ErrorResponse(
-          HttpStatus.BAD_REQUEST,
-          ErrorMessage.PATH_EXISTS,
-        );
+        throw new BadRequestException(PathMessage.PATH_EXISTS);
       } else {
         await this.pathRepository.save(data);
         return new HttpResponse(
           HttpStatus.CREATED,
-          CommonMessage.ADD_PATH_SUCCEED,
+          PathMessage.ADD_PATH_SUCCEED,
         );
       }
     } catch (error) {
-      return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+      throw error;
     }
   }
 
-  async updatePath(
-    param: any,
-    data: any,
-  ): Promise<HttpResponse | ErrorResponse> {
+  async updatePath(param: any, data: any): Promise<HttpResponse> {
     try {
       const result = await this.pathRepository.findOneBy({ id: param.id });
       if (!result) {
-        return new ErrorResponse(
-          HttpStatus.BAD_REQUEST,
-          ErrorMessage.PATH_NOT_FOUND,
-        );
+        throw new NotFoundException(PathMessage.PATH_NOT_FOUND);
       } else {
         const check = await this.pathRepository.findOne({
           where: { id: Not(param.id), name: data.name },
         });
         if (check) {
-          return new ErrorResponse(
-            HttpStatus.BAD_REQUEST,
-            ErrorMessage.PATH_EXISTS,
-          );
+          throw new BadRequestException(PathMessage.PATH_EXISTS);
         } else {
           await this.pathRepository.update(param.id, data);
           return new HttpResponse(
             HttpStatus.CREATED,
-            CommonMessage.UPDATE_PATH_SUCCEED,
+            PathMessage.UPDATE_PATH_SUCCEED,
           );
         }
       }
     } catch (error) {
-      return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+      throw error;
     }
   }
 
-  async deletePath(param: any): Promise<HttpResponse | ErrorResponse> {
+  async deletePath(param: any): Promise<HttpResponse> {
     try {
       const result = await this.pathRepository.findOne({
         where: { id: param.id },
@@ -158,16 +140,13 @@ export class PathService {
         await this.pathRepository.delete(param.id);
         return new HttpResponse(
           HttpStatus.ACCEPTED,
-          CommonMessage.DELETE_PATH_SUCCEED,
+          PathMessage.DELETE_PATH_SUCCEED,
         );
       } else {
-        return new ErrorResponse(
-          HttpStatus.NOT_FOUND,
-          ErrorMessage.PATH_NOT_FOUND,
-        );
+        throw new NotFoundException(PathMessage.PATH_NOT_FOUND);
       }
     } catch (error) {
-      return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+      throw error;
     }
   }
 }

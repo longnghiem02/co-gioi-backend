@@ -1,8 +1,8 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import { AbstractEntity } from '../../../common/model/abstract-base.model';
 import { Gu } from 'src/modules/gu/model/gu.model';
+import { GuHousePath } from '../../gu_house/model/gu_house-path.model';
 // import { Character } from 'src/modules/character/model/character.model';
-// import { GuHouse } from 'src/modules/gu-house/model/gu-house.model';
 // import { GuFormation } from 'src/modules/gu-formation/model/gu-formation.model';
 // import { KillerMove } from 'src/modules/killer-move/model/killer-move.model';
 // import { Beast } from 'src/modules/beast/model/beast.model';
@@ -19,13 +19,16 @@ export class Path extends AbstractEntity {
   name: string;
 
   @Column({
-    name: 'detail',
+    name: 'information',
     nullable: true,
   })
-  detail: string;
+  information: string;
 
   @OneToMany(() => Gu, (gu) => gu.path)
   gus: Gu[];
+
+  @OneToMany(() => GuHousePath, (guHousePath) => guHousePath.path)
+  guHousePaths: GuHousePath[];
 
   // @OneToMany(
   //   () => Character,
@@ -34,9 +37,6 @@ export class Path extends AbstractEntity {
   //   },
   // )
   // characters: Character[];
-
-  // @OneToMany(() => GuHouse, (guHouse) => guHouse.path)
-  // guHouses: GuHouse[];
 
   // @OneToMany(() => GuFormation, (guFormation) => guFormation.path)
   // guFormations: GuFormation[];

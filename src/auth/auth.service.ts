@@ -1,14 +1,18 @@
-import { Injectable, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  HttpStatus,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Account } from 'src/modules/account/model/account.model';
 import { HttpResponse } from 'src/common/dto/http-response.dto';
-import { ErrorResponse } from 'src/common/dto/error-response.dto';
 import { PasswordService } from 'src/auth/service/password.service';
 import {
-  CommonMessage,
-  ErrorMessage,
+  AccountMessage,
+  AuthMessage,
 } from 'src/common/constants/message.constants';
 
 @Injectable()
@@ -20,16 +24,13 @@ export class AuthService {
     private passwordService: PasswordService,
   ) {}
 
-  async handleSignUp(data: any): Promise<HttpResponse | ErrorResponse> {
+  async handleSignUp(data: any): Promise<HttpResponse> {
     try {
       const checkEmail = await this.accountRepository.findOneBy({
         email: data.email,
       });
       if (checkEmail) {
-        return new ErrorResponse(
-          HttpStatus.BAD_REQUEST,
-          ErrorMessage.EMAIL_HAS_BEEN_USED,
-        );
+        throw new BadRequestException(AccountMessage.EMAIL_HAS_BEEN_USED);
       } else {
         const hashPassword = await this.passwordService.hashPassword(
           data.password,
@@ -41,15 +42,15 @@ export class AuthService {
         });
         return new HttpResponse(
           HttpStatus.CREATED,
-          CommonMessage.SIGN_UP_SUCCEED,
+          AuthMessage.SIGN_UP_SUCCEED,
         );
       }
     } catch (error) {
-      return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+      throw error;
     }
   }
 
-  async handleSignIn(data: any): Promise<HttpResponse | ErrorResponse> {
+  async handleSignIn(data: any): Promise<HttpResponse> {
     try {
       const account = await this.accountRepository.findOne({
         where: { email: data.email },
@@ -65,20 +66,14 @@ export class AuthService {
         },
       });
       if (!account) {
-        return new ErrorResponse(
-          HttpStatus.NOT_FOUND,
-          ErrorMessage.ACCOUNT_NOT_FOUND,
-        );
+        throw new NotFoundException(AccountMessage.ACCOUNT_NOT_FOUND);
       }
       const checkPassword = await this.passwordService.comparePassword(
         data.password,
         account.password,
       );
       if (!checkPassword) {
-        return new ErrorResponse(
-          HttpStatus.UNAUTHORIZED,
-          ErrorMessage.WRONG_PASSWORD,
-        );
+        throw new BadRequestException(AuthMessage.WRONG_PASSWORD);
       } else {
         const payload = {
           id: account.id,
@@ -87,17 +82,18 @@ export class AuthService {
           role: account.role.name,
         };
         const access_token = await this.jwtService.signAsync(payload);
-        return new HttpResponse(HttpStatus.OK, CommonMessage.OK, access_token);
+        return new HttpResponse(
+          HttpStatus.OK,
+          AuthMessage.SIGN_IN_SUCCEED,
+          access_token,
+        );
       }
     } catch (error) {
-      return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+      throw error;
     }
   }
 
-  async handleChangePassword(
-    account: any,
-    data: any,
-  ): Promise<HttpResponse | ErrorResponse> {
+  async handleChangePassword(account: any, data: any): Promise<HttpResponse> {
     try {
       const result = await this.accountRepository.findOneBy({
         id: account.id,
@@ -116,22 +112,16 @@ export class AuthService {
           });
           return new HttpResponse(
             HttpStatus.CREATED,
-            CommonMessage.UPDATE_ACCOUNT_SUCCEED,
+            AccountMessage.UPDATE_ACCOUNT_SUCCEED,
           );
         } else {
-          return new ErrorResponse(
-            HttpStatus.UNAUTHORIZED,
-            ErrorMessage.WRONG_PASSWORD,
-          );
+          throw new BadRequestException(AuthMessage.WRONG_PASSWORD);
         }
       } else {
-        return new ErrorResponse(
-          HttpStatus.NOT_FOUND,
-          ErrorMessage.ACCOUNT_NOT_FOUND,
-        );
+        throw new NotFoundException(AccountMessage.ACCOUNT_NOT_FOUND);
       }
     } catch (error) {
-      return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+      throw error;
     }
   }
 }

@@ -29,7 +29,7 @@ export class RoleController {
   }
 
   @Get('get-all')
-  @Roles(Role.ADMIN)
+  @Roles()
   async getAllRole(@Query() paginateDTO: PaginateDTO) {
     return await this.roleService.handleGetAllRole(paginateDTO);
   }

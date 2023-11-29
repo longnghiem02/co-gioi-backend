@@ -1,14 +1,17 @@
-import { Injectable, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  HttpStatus,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Not, Repository } from 'typeorm';
 import { Account } from './model/account.model';
-import { MetaDTO } from 'src/common/dto/meta.dto';
-import { PageDTO } from 'src/common/dto/page.dto';
+import { PageDTO, MetaDTO } from 'src/common/dto';
 import { HttpResponse } from 'src/common/dto/http-response.dto';
-import { ErrorResponse } from 'src/common/dto/error-response.dto';
 import {
   CommonMessage,
-  ErrorMessage,
+  AccountMessage,
 } from 'src/common/constants/message.constants';
 
 @Injectable()
@@ -18,7 +21,7 @@ export class AccountService {
     private accountRepository: Repository<Account>,
   ) {}
 
-  async getAllAccount(paginate: any): Promise<HttpResponse | ErrorResponse> {
+  async getAllAccount(paginate: any): Promise<HttpResponse> {
     try {
       const [data, count] = await this.accountRepository.findAndCount({
         order: { username: 'ASC' },
@@ -39,17 +42,14 @@ export class AccountService {
       if (result) {
         return new HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
-        return new ErrorResponse(
-          HttpStatus.NOT_FOUND,
-          ErrorMessage.ACCOUNT_NOT_FOUND,
-        );
+        throw new NotFoundException(AccountMessage.ACCOUNT_NOT_FOUND);
       }
     } catch (error) {
-      return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+      throw error;
     }
   }
 
-  async getAccountInfo(param: any): Promise<HttpResponse | ErrorResponse> {
+  async getAccountInfo(param: any): Promise<HttpResponse> {
     try {
       const result = await this.accountRepository.findOne({
         where: { id: param.id },
@@ -61,17 +61,14 @@ export class AccountService {
       if (result) {
         return new HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
-        return new ErrorResponse(
-          HttpStatus.NOT_FOUND,
-          ErrorMessage.ACCOUNT_NOT_FOUND,
-        );
+        throw new NotFoundException(AccountMessage.ACCOUNT_NOT_FOUND);
       }
     } catch (error) {
-      return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+      throw error;
     }
   }
 
-  async getMyAccountInfo(id: number): Promise<HttpResponse | ErrorResponse> {
+  async getMyAccountInfo(id: number): Promise<HttpResponse> {
     try {
       const result = await this.accountRepository.findOne({
         where: { id: id },
@@ -83,20 +80,14 @@ export class AccountService {
       if (result) {
         return new HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
-        return new ErrorResponse(
-          HttpStatus.NOT_FOUND,
-          ErrorMessage.ACCOUNT_NOT_FOUND,
-        );
+        throw new NotFoundException(AccountMessage.ACCOUNT_NOT_FOUND);
       }
     } catch (error) {
-      return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+      throw error;
     }
   }
 
-  async updateAccount(
-    account: any,
-    data: any,
-  ): Promise<HttpResponse | ErrorResponse> {
+  async updateAccount(account: any, data: any): Promise<HttpResponse> {
     try {
       const result = await this.accountRepository.findOneBy({
         id: account.id,
@@ -106,29 +97,23 @@ export class AccountService {
           where: { id: Not(account.id), email: data.email },
         });
         if (check) {
-          return new ErrorResponse(
-            HttpStatus.BAD_REQUEST,
-            ErrorMessage.EMAIL_HAS_BEEN_USED,
-          );
+          throw new BadRequestException(AccountMessage.EMAIL_HAS_BEEN_USED);
         } else {
           await this.accountRepository.update(account.id, data);
           return new HttpResponse(
             HttpStatus.CREATED,
-            CommonMessage.UPDATE_ACCOUNT_SUCCEED,
+            AccountMessage.UPDATE_ACCOUNT_SUCCEED,
           );
         }
       } else {
-        return new ErrorResponse(
-          HttpStatus.NOT_FOUND,
-          ErrorMessage.ACCOUNT_NOT_FOUND,
-        );
+        throw new NotFoundException(AccountMessage.ACCOUNT_NOT_FOUND);
       }
     } catch (error) {
-      return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+      throw error;
     }
   }
 
-  async deleteAccount(param: any): Promise<HttpResponse | ErrorResponse> {
+  async deleteAccount(param: any): Promise<HttpResponse> {
     try {
       const result = await this.accountRepository.findOneBy({
         id: param.id,
@@ -137,16 +122,13 @@ export class AccountService {
         await this.accountRepository.delete(param.id);
         return new HttpResponse(
           HttpStatus.OK,
-          CommonMessage.DELETE_ACCOUNT_SUCCEED,
+          AccountMessage.DELETE_ACCOUNT_SUCCEED,
         );
       } else {
-        return new ErrorResponse(
-          HttpStatus.NOT_FOUND,
-          ErrorMessage.ACCOUNT_NOT_FOUND,
-        );
+        throw new NotFoundException(AccountMessage.ACCOUNT_NOT_FOUND);
       }
     } catch (error) {
-      return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+      throw error;
     }
   }
 }

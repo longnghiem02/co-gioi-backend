@@ -1,12 +1,18 @@
-import { Injectable, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  HttpStatus,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Not, Repository } from 'typeorm';
 import { Role } from './model/role.model';
-import { HttpResponse } from 'src/configs/HttpResponse.config';
+import { HttpResponse } from 'src/common/dto/http-response.dto';
 import {
   CommonMessage,
-  ErrorMessage,
+  RoleMessage,
 } from 'src/common/constants/message.constants';
+import { PageDTO, MetaDTO } from 'src/common/dto';
 
 @Injectable()
 export class RoleService {
@@ -25,33 +31,39 @@ export class RoleService {
         },
       });
       if (result) {
-        return HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
+        return new HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
-        return HttpResponse(HttpStatus.NOT_FOUND, ErrorMessage.ROLE_NOT_FOUND);
+        throw new NotFoundException(RoleMessage.ROLE_NOT_FOUND);
       }
     } catch (error) {
-      return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+      throw error;
     }
   }
 
-  async handleGetAllRole(paginate: any): Promise<HttpResponse> {
+  async handleGetAllRole(query: any): Promise<HttpResponse> {
     try {
-      const result = await this.roleRepository.find({
+      const [data, count] = await this.roleRepository.findAndCount({
         order: { name: 'ASC' },
-        take: paginate.take,
-        skip: (paginate.page - 1) * paginate.take,
+        take: query.take,
+        skip: (query.page - 1) * query.take,
         select: {
           id: true,
           name: true,
         },
       });
+
+      const result = new PageDTO(
+        data,
+        new MetaDTO(count, query.page, query.limit),
+      );
+
       if (result) {
-        return HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
+        return new HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
-        return HttpResponse(HttpStatus.NOT_FOUND, ErrorMessage.ROLE_NOT_FOUND);
+        throw new NotFoundException(RoleMessage.ROLE_NOT_FOUND);
       }
     } catch (error) {
-      return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+      throw error;
     }
   }
 
@@ -64,12 +76,12 @@ export class RoleService {
         },
       });
       if (result) {
-        return HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
+        return new HttpResponse(HttpStatus.OK, CommonMessage.OK, result);
       } else {
-        return HttpResponse(HttpStatus.NOT_FOUND, ErrorMessage.ROLE_NOT_FOUND);
+        throw new NotFoundException(RoleMessage.ROLE_NOT_FOUND);
       }
     } catch (error) {
-      return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+      throw error;
     }
   }
 
@@ -77,13 +89,16 @@ export class RoleService {
     try {
       const check = await this.roleRepository.findOneBy({ name: data.name });
       if (check) {
-        return HttpResponse(HttpStatus.BAD_REQUEST, ErrorMessage.ROLE_EXISTS);
+        throw new BadRequestException(RoleMessage.ROLE_EXISTS);
       } else {
         await this.roleRepository.save(data);
-        return HttpResponse(HttpStatus.CREATED, CommonMessage.ADD_ROLE_SUCCEED);
+        return new HttpResponse(
+          HttpStatus.CREATED,
+          RoleMessage.ADD_ROLE_SUCCEED,
+        );
       }
     } catch (error) {
-      return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+      throw error;
     }
   }
 
@@ -91,26 +106,23 @@ export class RoleService {
     try {
       const result = await this.roleRepository.findOneBy({ id: param.id });
       if (!result) {
-        return HttpResponse(
-          HttpStatus.BAD_REQUEST,
-          ErrorMessage.ROLE_NOT_FOUND,
-        );
+        throw new NotFoundException(RoleMessage.ROLE_NOT_FOUND);
       } else {
         const check = await this.roleRepository.findOne({
           where: { id: Not(param.id), name: data.name },
         });
         if (check) {
-          return HttpResponse(HttpStatus.BAD_REQUEST, ErrorMessage.ROLE_EXISTS);
+          throw new BadRequestException(RoleMessage.ROLE_EXISTS);
         } else {
           await this.roleRepository.update(param.id, data);
-          return HttpResponse(
+          return new HttpResponse(
             HttpStatus.CREATED,
-            CommonMessage.UPDATE_ROLE_SUCCEED,
+            RoleMessage.UPDATE_ROLE_SUCCEED,
           );
         }
       }
     } catch (error) {
-      return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+      throw error;
     }
   }
 
@@ -121,15 +133,15 @@ export class RoleService {
       });
       if (result) {
         await this.roleRepository.delete(param.id);
-        return HttpResponse(
+        return new HttpResponse(
           HttpStatus.ACCEPTED,
-          CommonMessage.DELETE_ROLE_SUCCEED,
+          RoleMessage.DELETE_ROLE_SUCCEED,
         );
       } else {
-        return HttpResponse(HttpStatus.NOT_FOUND, ErrorMessage.ROLE_NOT_FOUND);
+        throw new NotFoundException(RoleMessage.ROLE_NOT_FOUND);
       }
     } catch (error) {
-      return HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, error);
+      throw error;
     }
   }
 }
